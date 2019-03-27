@@ -1,0 +1,29 @@
+rootProject.name = 'lteiandroidutils'
+
+def includeLjuProject(String name) {
+    include(':' + name)
+    project(':' + name).projectDir = new File("/media/ltei/UbuntuArchive/LteiUtils/LteiJavaUtils/" + name) 
+}
+
+include(':lauadmob')
+include(':lauaudioconverter')
+include(':laubadges')
+include(':laubilling')
+include(':laububbleseekbar')
+include(':laucircleimageview')
+include(':laugmap')
+include(':laugoogleauth')
+include(':lauimagepicker')
+include(':laulocation')
+include(':launotification')
+include(':lauopengl')
+include(':lausave')
+include(':laustate')
+include(':lauutils')
+include(':lauverticaldrawer')
+include(':lauviews')
+
+includeLjuProject("ljubase")
+includeLjuProject("ljugson")
+includeLjuProject("ljuutils")
+includeLjuProject("ljuwebclient")
