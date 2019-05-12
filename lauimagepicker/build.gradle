@@ -26,21 +26,6 @@ android {
 //    }
 }
 
-//sourceSets {
-//    main.kotlin.srcDirs += 'src/main/java'
-//    main.java.srcDirs += 'src/main/java'
-//    main {
-//        java {
-//            println(new File("src/main/java/com/ltei/libimagepicker").absolutePath)
-//            srcDirs = ["src/main/java/com/ltei/libimagepicker"] // TODO Cheap fix
-//        }
-//        kotlin {
-//            println(new File("src/main/java/com/ltei/libimagepicker").absolutePath)
-//            srcDirs = ["src/main/java/com/ltei/libimagepicker"] // TODO Cheap fix
-//        }
-//    }
-//}
-
 repositories {
     google()
     jcenter()

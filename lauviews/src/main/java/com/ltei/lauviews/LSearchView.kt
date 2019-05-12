@@ -102,7 +102,7 @@ class LSearchView: RelativeLayout {
         isExpanded = false
     }
 
-    private fun onSearchIconClick(v: View) {
+    private fun onSearchIconClick(@Suppress("UNUSED_PARAMETER") v: View) {
         if (isExpanded) {
             collapseSearchView()
         } else {

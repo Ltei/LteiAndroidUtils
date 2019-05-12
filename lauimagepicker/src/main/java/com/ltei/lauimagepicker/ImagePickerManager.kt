@@ -8,6 +8,7 @@ import android.net.Uri
 import android.support.v4.app.Fragment
 import com.ltei.ljubase.LException
 import com.ltei.ljubase.Result
+import com.ltei.lauimagepicker.CropImage
 import java8.util.concurrent.CompletableFuture
 
 
