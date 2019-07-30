@@ -5,8 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
 import android.provider.MediaStore
-import android.support.v4.app.Fragment
-import com.ltei.ljubase.LLog
+import androidx.fragment.app.Fragment
 
 object LIntents {
 
@@ -21,13 +20,13 @@ object LIntents {
     fun openMail(context: Context, dest: Array<String>, title: String = "", content: String = "") {
         try {
             val intent = Intent(Intent.ACTION_SENDTO)
-                    .setType(INTENT_TYPE_PLAIN_TEXT)
-                    .putExtra(Intent.EXTRA_SUBJECT, title)
-                    .putExtra(Intent.EXTRA_TEXT, content)
-                    .putExtra(android.content.Intent.EXTRA_EMAIL, dest)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .addFlags(Intent.FLAG_FROM_BACKGROUND)
-                    .setData(Uri.parse("mailto:${dest[0]}"))
+                .setType(INTENT_TYPE_PLAIN_TEXT)
+                .putExtra(Intent.EXTRA_SUBJECT, title)
+                .putExtra(Intent.EXTRA_TEXT, content)
+                .putExtra(android.content.Intent.EXTRA_EMAIL, dest)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .addFlags(Intent.FLAG_FROM_BACKGROUND)
+                .setData(Uri.parse("mailto:${dest[0]}"))
             context.startActivity(intent)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -42,8 +41,10 @@ object LIntents {
     }
 
     fun openGalleryPicker(fragment: Fragment, requestCode: Int) {
-        val pickPhoto = Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val pickPhoto = Intent(
+            Intent.ACTION_PICK,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
         fragment.startActivityForResult(pickPhoto, requestCode)
     }
 
@@ -82,7 +83,7 @@ object LIntents {
 
     fun extractSendAudio(intent: Intent): Uri? {
         intent.type?.let { type ->
-            if (type.contains("video/")) {
+            if (type.contains("audio/")) {
                 (intent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as? Uri)?.let { image ->
                     return image
                 }
@@ -93,7 +94,7 @@ object LIntents {
 
     fun extractSendVideo(intent: Intent): Uri? {
         intent.type?.let { type ->
-            if (type.contains("audio/")) {
+            if (type.contains("video/")) {
                 (intent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as? Uri)?.let { image ->
                     return image
                 }
@@ -103,9 +104,7 @@ object LIntents {
     }
 
     fun extractViewLocation(intent: Intent): String? {
-        LLog.debug(javaClass, "Extracting view location")
         intent.data?.let { location ->
-            LLog.debug(javaClass, "Extracted view location")
             return location.toString()
         }
         return null

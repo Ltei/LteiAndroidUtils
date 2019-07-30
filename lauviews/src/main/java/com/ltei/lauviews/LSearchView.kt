@@ -12,11 +12,10 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import com.ltei.ljubase.LLog
 import com.ltei.lauutils.LUnits
 import com.ltei.lauutils.LViews
 
-class LSearchView: RelativeLayout {
+class LSearchView : RelativeLayout {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -112,7 +111,6 @@ class LSearchView: RelativeLayout {
 
     private inner class MOnFocusChangeListener : OnFocusChangeListener {
         override fun onFocusChange(v: View?, hasFocus: Boolean) {
-            LLog.debug(javaClass, "onFocusChange($hasFocus)")
             if (!hasFocus) {
                 collapseSearchView()
             }

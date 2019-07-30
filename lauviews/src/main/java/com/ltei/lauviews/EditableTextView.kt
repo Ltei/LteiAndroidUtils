@@ -6,17 +6,17 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
-import android.support.v7.widget.AppCompatAutoCompleteTextView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 
 /**
  * Custom edit text view to handle some common usage patterns
  */
 class EditableTextView @JvmOverloads
-constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle)
-    : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle) :
+    AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
 
     private open class BaseAnimatorListener : Animator.AnimatorListener {
         override fun onAnimationStart(animation: Animator) {}
@@ -69,13 +69,17 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = a
      */
     private fun initListeners() {
         addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int,
-                                           after: Int) {
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int, count: Int,
+                after: Int
+            ) {
 
             }
 
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int,
-                                       count: Int) {
+            override fun onTextChanged(
+                s: CharSequence, start: Int, before: Int,
+                count: Int
+            ) {
 
             }
 

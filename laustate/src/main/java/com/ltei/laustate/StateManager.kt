@@ -1,9 +1,9 @@
 package com.ltei.laustate
 
-import android.support.v4.app.FragmentActivity
 import android.view.animation.AnimationUtils
-import com.ltei.ljubase.LLog
+import androidx.fragment.app.FragmentActivity
 import com.ltei.lauviews.LAnimations
+import com.ltei.ljubase.Logger
 
 /**
  * Manages fragment holder
@@ -11,10 +11,11 @@ import com.ltei.lauviews.LAnimations
  * new instance will result on the deletion of the last instances.
  */
 class StateManager(
-        private val parent: FragmentActivity,
-        private val stateLayoutId: Int
+    private val parent: FragmentActivity,
+    private val stateLayoutId: Int
 ) {
 
+    private val logger = Logger(this)
     private var mBackstack = ArrayList<State>()
 
     val backstack: List<State> get() = mBackstack
@@ -25,15 +26,15 @@ class StateManager(
     fun setState(state: State) {
         if (mBackstack.size == 0) {
             parent.supportFragmentManager.beginTransaction()
-                    .replace(stateLayoutId, state)
-                    .addToBackStack(null)
-                    .commit()
+                .replace(stateLayoutId, state)
+                .addToBackStack(null)
+                .commit()
         } else {
             tryStartChangeAnimation {
                 parent.supportFragmentManager.beginTransaction()
-                        .replace(stateLayoutId, state)
-                        .addToBackStack(null)
-                        .commit()
+                    .replace(stateLayoutId, state)
+                    .addToBackStack(null)
+                    .commit()
             }
 
             if (currentState.shouldRemoveFromBackstack(state)) {
@@ -59,9 +60,9 @@ class StateManager(
                 mBackstack.removeAt(mBackstack.size - 1)
                 val newState = currentState // == mBackstack.last()
                 parent.supportFragmentManager.beginTransaction()
-                        .replace(stateLayoutId, newState)
-                        .addToBackStack(null)
-                        .commit()
+                    .replace(stateLayoutId, newState)
+                    .addToBackStack(null)
+                    .commit()
             }
             true
         } else {
@@ -88,7 +89,7 @@ class StateManager(
     private fun tryStartChangeAnimation(onAnimationEnd: () -> Unit) {
         val currentStateView = currentState.view
         if (currentStateView == null) {
-            LLog.debug(javaClass, "tryStartChangeAnimation : Aborted since state is already changing ($currentStateView)")
+            logger.debug("tryStartChangeAnimation : Aborted since state is already changing ($currentStateView)")
             return
         }
         val animation = AnimationUtils.loadAnimation(parent.applicationContext, currentState.outAnimationId)

@@ -8,7 +8,7 @@ buildscript {
     ext.gson_compile_path = "com.google.code.gson:gson:$gson_version"
     ext.cfuture_compile_path = 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
     ext.okhttp_compile_path = 'com.squareup.okhttp3:okhttp:3.12.1'
-    
+
     ext.android_support_version = '28.0.0'
     ext.play_services_version = '15.0.1'
 

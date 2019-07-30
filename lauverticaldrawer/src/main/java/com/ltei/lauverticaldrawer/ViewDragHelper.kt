@@ -3,25 +3,30 @@
 package com.ltei.lauverticaldrawer
 
 import android.content.Context
-import android.support.v4.view.MotionEventCompat
-import android.support.v4.view.VelocityTrackerCompat
-import android.support.v4.view.ViewCompat
-import android.support.v4.widget.ScrollerCompat
 import android.view.*
 import android.view.animation.Interpolator
+import androidx.core.view.MotionEventCompat
+import androidx.core.view.VelocityTrackerCompat
+import androidx.core.view.ViewCompat
+import androidx.core.widget.ScrollerCompat
 import java.util.*
 
 /**
  * Apps should use ViewDragHelper.create() to get a new instance.
  * This will allow VDH to use internal compatibility implementations for different
  * platform versions.
- * If the interpolator is null, the default interpolator will be used.
+ * If the interpolator is null, the DEFAULT interpolator will be used.
  *
  * @param context Context to initialize config-dependent params from
  * @param forParent Parent view to monitor
  * @param interpolator interpolator for scroller
  */
-open class ViewDragHelper private constructor(context: Context, forParent: ViewGroup?, interpolator: Interpolator?, cb: Callback?) {
+open class ViewDragHelper private constructor(
+    context: Context,
+    forParent: ViewGroup?,
+    interpolator: Interpolator?,
+    cb: Callback?
+) {
 
     // Current drag state; idle, dragging or settling
     private var mDragState: Int = 0
@@ -124,7 +129,7 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
          * Called when the given edge may become locked. This can happen if an edge drag
          * was preliminarily rejected before beginning, but after [.onEdgeTouched]
          * was called. This method should return true to lock this edge or false to leave it
-         * unlocked. The default behavior is to leave edges unlocked.
+         * unlocked. The DEFAULT behavior is to leave edges unlocked.
          * @param edgeFlags A combination of edge flags describing the edge(s) locked
          * @return true to lock the edge, false to leave it unlocked
          */
@@ -187,7 +192,7 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
 
         /**
          * Restrict the motion of the dragged child view along the horizontal axis.
-         * The default implementation does not allow horizontal motion; the extending
+         * The DEFAULT implementation does not allow horizontal motion; the extending
          * class must override this method and provide the desired clamping.
          * @param child Child view being dragged
          * @param left Attempted motion along the X axis
@@ -200,7 +205,7 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
 
         /**
          * Restrict the motion of the dragged child view along the vertical axis.
-         * The default implementation does not allow vertical motion; the extending
+         * The DEFAULT implementation does not allow vertical motion; the extending
          * class must override this method and provide the desired clamping.
          * @param child Child view being dragged
          * @param top Attempted motion along the Y axis
@@ -308,8 +313,10 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
      */
     fun captureChildView(childView: View, activePointerId: Int) {
         if (childView.parent !== mParentView) {
-            throw IllegalArgumentException("captureChildView: parameter must be a descendant " +
-                    "of the ViewDragHelper's tracked parent view (" + mParentView + ")")
+            throw IllegalArgumentException(
+                "captureChildView: parameter must be a descendant " +
+                        "of the ViewDragHelper's tracked parent view (" + mParentView + ")"
+            )
         }
 
         mCapturedView = childView
@@ -411,9 +418,11 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
             throw IllegalStateException("Cannot settleCapturedViewAt outside of a call to " + "Callback#onViewReleased")
         }
 
-        return forceSettleCapturedViewAt(finalLeft, finalTop,
-                VelocityTrackerCompat.getXVelocity(mVelocityTracker, mActivePointerId).toInt(),
-                VelocityTrackerCompat.getYVelocity(mVelocityTracker, mActivePointerId).toInt())
+        return forceSettleCapturedViewAt(
+            finalLeft, finalTop,
+            VelocityTrackerCompat.getXVelocity(mVelocityTracker, mActivePointerId).toInt(),
+            VelocityTrackerCompat.getYVelocity(mVelocityTracker, mActivePointerId).toInt()
+        )
     }
 
     /**
@@ -546,10 +555,12 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
             throw IllegalStateException("Cannot flingCapturedView outside of a call to " + "Callback#onViewReleased")
         }
 
-        mScroller!!.fling(mCapturedView!!.left, mCapturedView!!.top,
-                VelocityTrackerCompat.getXVelocity(mVelocityTracker, mActivePointerId).toInt(),
-                VelocityTrackerCompat.getYVelocity(mVelocityTracker, mActivePointerId).toInt(),
-                minLeft, maxLeft, minTop, maxTop)
+        mScroller!!.fling(
+            mCapturedView!!.left, mCapturedView!!.top,
+            VelocityTrackerCompat.getXVelocity(mVelocityTracker, mActivePointerId).toInt(),
+            VelocityTrackerCompat.getYVelocity(mVelocityTracker, mActivePointerId).toInt(),
+            minLeft, maxLeft, minTop, maxTop
+        )
 
         setDragState(STATE_SETTLING)
     }
@@ -671,13 +682,13 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
             if (mInitialMotionX != null) {
                 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
                 run {
-                    System.arraycopy(mInitialMotionX, 0, imx, 0, mInitialMotionX!!.size)
-                    System.arraycopy(mInitialMotionY, 0, imy, 0, mInitialMotionY!!.size)
-                    System.arraycopy(mLastMotionX, 0, lmx, 0, mLastMotionX!!.size)
-                    System.arraycopy(mLastMotionY, 0, lmy, 0, mLastMotionY!!.size)
-                    System.arraycopy(mInitialEdgesTouched, 0, iit, 0, mInitialEdgesTouched!!.size)
-                    System.arraycopy(mEdgeDragsInProgress, 0, edip, 0, mEdgeDragsInProgress!!.size)
-                    System.arraycopy(mEdgeDragsLocked, 0, edl, 0, mEdgeDragsLocked!!.size)
+                    System.arraycopy(mInitialMotionX!!, 0, imx, 0, mInitialMotionX!!.size)
+                    System.arraycopy(mInitialMotionY!!, 0, imy, 0, mInitialMotionY!!.size)
+                    System.arraycopy(mLastMotionX!!, 0, lmx, 0, mLastMotionX!!.size)
+                    System.arraycopy(mLastMotionY!!, 0, lmy, 0, mLastMotionY!!.size)
+                    System.arraycopy(mInitialEdgesTouched!!, 0, iit, 0, mInitialEdgesTouched!!.size)
+                    System.arraycopy(mEdgeDragsInProgress!!, 0, edip, 0, mEdgeDragsInProgress!!.size)
+                    System.arraycopy(mEdgeDragsLocked!!, 0, edl, 0, mEdgeDragsLocked!!.size)
                 }
             }
 
@@ -709,7 +720,8 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
             val y = MotionEventCompat.getY(ev, i)
             // Sometimes we can try and save last motion for a pointer never recorded in initial motion. In this case we just discard it.
             if (mLastMotionX != null && mLastMotionY != null
-                    && mLastMotionX!!.size > pointerId && mLastMotionY!!.size > pointerId) {
+                && mLastMotionX!!.size > pointerId && mLastMotionY!!.size > pointerId
+            ) {
                 mLastMotionX!![pointerId] = x
                 mLastMotionY!![pointerId] = y
             }
@@ -789,9 +801,12 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
                 // This will not work for transformed views in Honeycomb+
                 val child = v.getChildAt(i)
                 if (x + scrollX >= child.left && x + scrollX < child.right &&
-                        y + scrollY >= child.top && y + scrollY < child.bottom &&
-                        canScroll(child, true, dx, dy, x + scrollX - child.left,
-                                y + scrollY - child.top)) {
+                    y + scrollY >= child.top && y + scrollY < child.bottom &&
+                    canScroll(
+                        child, true, dx, dy, x + scrollX - child.left,
+                        y + scrollY - child.top
+                    )
+                ) {
                     return true
                 }
             }
@@ -903,8 +918,13 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
                     }
                     // todo tmp }*/
 
-                    val toCapture = findTopChildUnder(mInitialMotionX!![pointerId].toInt(), mInitialMotionY!![pointerId].toInt())
-                    if (toCapture != null && checkTouchSlop(toCapture, dx, dy) && tryCaptureViewForDrag(toCapture, pointerId)) { // todo here
+                    val toCapture =
+                        findTopChildUnder(mInitialMotionX!![pointerId].toInt(), mInitialMotionY!![pointerId].toInt())
+                    if (toCapture != null && checkTouchSlop(toCapture, dx, dy) && tryCaptureViewForDrag(
+                            toCapture,
+                            pointerId
+                        )
+                    ) { // todo here
                         break
                     }
 
@@ -1023,7 +1043,10 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
                             break
                         }
 
-                        val toCapture = findTopChildUnder(mInitialMotionX!![pointerId].toInt(), mInitialMotionY!![pointerId].toInt())
+                        val toCapture = findTopChildUnder(
+                            mInitialMotionX!![pointerId].toInt(),
+                            mInitialMotionY!![pointerId].toInt()
+                        )
                         if (checkTouchSlop(toCapture, dx, dy) && tryCaptureViewForDrag(toCapture, pointerId)) {
                             break
                         }
@@ -1047,7 +1070,11 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
 
                         val x = MotionEventCompat.getX(ev, i)
                         val y = MotionEventCompat.getY(ev, i)
-                        if (findTopChildUnder(x.toInt(), y.toInt()) === mCapturedView && tryCaptureViewForDrag(mCapturedView, id)) {
+                        if (findTopChildUnder(x.toInt(), y.toInt()) === mCapturedView && tryCaptureViewForDrag(
+                                mCapturedView,
+                                id
+                            )
+                        ) {
                             newActivePointer = mActivePointerId
                             break
                         }
@@ -1103,9 +1130,10 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
         val absODelta = Math.abs(odelta)
 
         if (mInitialEdgesTouched!![pointerId] and edge != edge || mTrackingEdges and edge == 0 ||
-                mEdgeDragsLocked!![pointerId] and edge == edge ||
-                mEdgeDragsInProgress!![pointerId] and edge == edge ||
-                absDelta <= mTouchSlop && absODelta <= mTouchSlop) {
+            mEdgeDragsLocked!![pointerId] and edge == edge ||
+            mEdgeDragsInProgress!![pointerId] and edge == edge ||
+            absDelta <= mTouchSlop && absODelta <= mTouchSlop
+        ) {
             return false
         }
         if (absDelta < absODelta * 0.5f && mCallback!!.onEdgeLock(edge)) {
@@ -1245,11 +1273,13 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
     private fun releaseViewForPointerUp() {
         mVelocityTracker!!.computeCurrentVelocity(1000, mMaxVelocity)
         val xvel = clampMag(
-                VelocityTrackerCompat.getXVelocity(mVelocityTracker, mActivePointerId),
-                mMinVelocity, mMaxVelocity)
+            VelocityTrackerCompat.getXVelocity(mVelocityTracker, mActivePointerId),
+            mMinVelocity, mMaxVelocity
+        )
         val yvel = clampMag(
-                VelocityTrackerCompat.getYVelocity(mVelocityTracker, mActivePointerId),
-                mMinVelocity, mMaxVelocity)
+            VelocityTrackerCompat.getYVelocity(mVelocityTracker, mActivePointerId),
+            mMinVelocity, mMaxVelocity
+        )
         dispatchViewReleased(xvel, yvel)
     }
 
@@ -1270,8 +1300,10 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
         if (dx != 0 || dy != 0) {
             val clampedDx = clampedX - oldLeft
             val clampedDy = clampedY - oldTop
-            mCallback!!.onViewPositionChanged(mCapturedView!!, clampedX, clampedY,
-                    clampedDx, clampedDy)
+            mCallback!!.onViewPositionChanged(
+                mCapturedView!!, clampedX, clampedY,
+                clampedDx, clampedDy
+            )
         }
     }
 
@@ -1319,7 +1351,8 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
         for (i in childCount - 1 downTo 0) {
             val child = mParentView!!.getChildAt(mCallback!!.getOrderedChildIndex(i))
             if (x >= child.left && x < child.right &&
-                    y >= child.top && y < child.bottom) {
+                y >= child.top && y < child.bottom
+            ) {
                 return child
             }
         }
@@ -1458,7 +1491,12 @@ open class ViewDragHelper private constructor(context: Context, forParent: ViewG
          * @param cb Callback to provide information and receive events
          * @return a new ViewDragHelper instance
          */
-        fun create(forParent: ViewGroup, sensitivity: Float, interpolator: Interpolator?, cb: Callback): ViewDragHelper {
+        fun create(
+            forParent: ViewGroup,
+            sensitivity: Float,
+            interpolator: Interpolator?,
+            cb: Callback
+        ): ViewDragHelper {
             val helper = create(forParent, interpolator, cb)
             helper.mTouchSlop = (helper.mTouchSlop * (1 / sensitivity)).toInt()
             return helper

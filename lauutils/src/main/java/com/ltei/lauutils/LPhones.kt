@@ -2,15 +2,12 @@ package com.ltei.lauutils
 
 import android.content.Context
 import android.telephony.TelephonyManager
-import com.ltei.ljubase.LLog
 
 
 object LPhones {
 
     fun isNumberValid(phoneNumber: String): Boolean {
         val formattedPhoneNumber = phoneNumber.replace(" ", "").replace("-", "")
-
-        LLog.debug(this.javaClass, "InTheEnd1 $formattedPhoneNumber")
         if (formattedPhoneNumber[0] != '+' && !formattedPhoneNumber[0].isDigit())
             return false
 
@@ -18,7 +15,6 @@ object LPhones {
             if (!c.isDigit())
                 return false
 
-        LLog.debug(this.javaClass, "InTheEnd3")
         return true
     }
 

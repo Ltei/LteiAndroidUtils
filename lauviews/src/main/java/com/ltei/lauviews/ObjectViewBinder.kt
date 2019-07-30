@@ -5,7 +5,7 @@ import com.ltei.ljubase.interfaces.ObjectBinder
 import com.ltei.lauviews.recycler.ObjectViewHolder
 
 interface ObjectViewBinder<T>: ObjectBinder<T> {
-    val root: View
+    val objectView: View
 
     fun toObjectViewHolder(): ObjectViewHolder<T> {
         return ObjectViewHolder.FromViewObjectBinder(this)

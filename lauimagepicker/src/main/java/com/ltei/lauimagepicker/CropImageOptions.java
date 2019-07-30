@@ -25,7 +25,7 @@ import android.util.TypedValue;
 
 /**
  * All the possible options that can be set to customize crop image.<br>
- * Initialized with default values.
+ * Initialized with DEFAULT values.
  */
 public class CropImageOptions implements Parcelable {
 
@@ -68,23 +68,23 @@ public class CropImageOptions implements Parcelable {
   /**
    * if to show crop overlay UI what contains the crop window UI surrounded by background over the
    * cropping image.<br>
-   * default: true, may disable for animation or frame transition.
+   * DEFAULT: true, may disable for animation or frame transition.
    */
   public boolean showCropOverlay;
 
   /**
    * if to show progress bar when image async loading/cropping is in progress.<br>
-   * default: true, disable to provide custom progress bar UI.
+   * DEFAULT: true, disable to provide custom progress bar UI.
    */
   public boolean showProgressBar;
 
   /**
    * if auto-zoom functionality is enabled.<br>
-   * default: true.
+   * DEFAULT: true.
    */
   public boolean autoZoomEnabled;
 
-  /** if multi-touch should be enabled on the crop box default: false */
+  /** if multi-touch should be enabled on the crop box DEFAULT: false */
   public boolean multiTouchEnabled;
 
   /** The max zoom allowed during cropping. */

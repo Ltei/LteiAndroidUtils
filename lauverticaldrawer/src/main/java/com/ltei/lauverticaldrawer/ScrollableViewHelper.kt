@@ -1,10 +1,10 @@
 package com.ltei.lauverticaldrawer
 
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ListView
 import android.widget.ScrollView
+import androidx.recyclerview.widget.RecyclerView
 
 
 class ScrollableViewHelper {
@@ -45,11 +45,15 @@ class ScrollableViewHelper {
             return if (isSlidingUp) {
                 val firstChild = scrollableView.getChildAt(0)
                 // Approximate the scroll position based on the top child and the first visible item
-                scrollableView.getChildLayoutPosition(firstChild) * layoutManager.getDecoratedMeasuredHeight(firstChild) - layoutManager.getDecoratedTop(firstChild)
+                scrollableView.getChildLayoutPosition(firstChild) * layoutManager.getDecoratedMeasuredHeight(firstChild) - layoutManager.getDecoratedTop(
+                    firstChild
+                )
             } else {
                 val lastChild = scrollableView.getChildAt(scrollableView.childCount - 1)
                 // Approximate the scroll position based on the bottom child and the last visible item
-                (scrollableView.adapter!!.itemCount - 1) * layoutManager.getDecoratedMeasuredHeight(lastChild) + layoutManager.getDecoratedBottom(lastChild) - scrollableView.getBottom()
+                (scrollableView.adapter!!.itemCount - 1) * layoutManager.getDecoratedMeasuredHeight(lastChild) + layoutManager.getDecoratedBottom(
+                    lastChild
+                ) - scrollableView.getBottom()
             }
         } else {
             return 0

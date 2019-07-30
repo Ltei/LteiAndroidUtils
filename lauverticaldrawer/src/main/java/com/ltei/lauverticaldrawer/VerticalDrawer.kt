@@ -9,8 +9,6 @@ import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v4.view.MotionEventCompat
-import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
@@ -20,37 +18,50 @@ import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.view.animation.AnimationUtils
 import android.view.animation.Interpolator
-import com.ltei.ljubase.LLog
+import androidx.core.view.MotionEventCompat
+import androidx.core.view.ViewCompat
+import com.ltei.ljubase.Logger
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.roundToInt
 
 @Suppress("DEPRECATION")
-class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : ViewGroup(context, attrs, defStyle) {
+class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
+    ViewGroup(context, attrs, defStyle) {
+
+    private val logger = Logger(this)
 
     private var mMinFlingVelocity = DEFAULT_MIN_FLING_VELOCITY // Minimum velocity that will be detected as a fling
-    private var mCoveredFadeColor = DEFAULT_FADE_COLOR // The fade color used for the panel covered by the slider. 0 = no fading.
+    private var mCoveredFadeColor =
+        DEFAULT_FADE_COLOR // The fade color used for the panel covered by the slider. 0 = no fading.
     private val mCoveredFadePaint = Paint() // The paint used to dim the main layout when sliding
     private var mShadowDrawable: Drawable? // Drawable used to draw the shadow between panes.
     private var mPanelHeight = -1 // The size of the overhang in pixels.
     private var mShadowHeight = -1 // The size of the shadow in pixels.
     private var mParallaxOffset = -1 // Parallax offset
     private var mIsSlidingUp: Boolean = false // True if the collapsed panel should be dragged up.
-    private var mOverlayContent = DEFAULT_OVERLAY_FLAG // Panel overlays the windows instead of putting it underneath it.
+    private var mOverlayContent =
+        DEFAULT_OVERLAY_FLAG // Panel overlays the windows instead of putting it underneath it.
     private var mClipPanel = DEFAULT_CLIP_PANEL_FLAG // The main view is clipped to the main top border
-    private var mDragView: View? = null // If provided, the panel can be dragged by only this view. Otherwise, the entire panel can be used for dragging.
-    private var mDragViewResId = -1 // If provided, the panel can be dragged by only this view. Otherwise, the entire panel can be used for dragging.
-    private var mScrollableView: View? = null // If provided, the panel will transfer the scroll from this view to itself when needed.
+    private var mDragView: View? =
+        null // If provided, the panel can be dragged by only this view. Otherwise, the entire panel can be used for dragging.
+    private var mDragViewResId =
+        -1 // If provided, the panel can be dragged by only this view. Otherwise, the entire panel can be used for dragging.
+    private var mScrollableView: View? =
+        null // If provided, the panel will transfer the scroll from this view to itself when needed.
     private var mScrollableViewResId: Int = -1
     private var mScrollableViewHelper = ScrollableViewHelper()
     private var mSlideableView: View? = null // The child view that can slide, if any.
     private var mMainView: View? = null // The main view
 
     private var mSlideState: PanelState? = DEFAULT_SLIDE_STATE
-    private var mLastNotDraggingSlideState = DEFAULT_SLIDE_STATE // If the current slide state is DRAGGING, this will store the last non dragging state
-    private var mSlideOffset: Float = 0.toFloat() // How far the panel is offset from its expanded position. range [0, 1] where 0 = collapsed, 1 = expanded.
+    private var mLastNotDraggingSlideState =
+        DEFAULT_SLIDE_STATE // If the current slide state is DRAGGING, this will store the last non dragging state
+    private var mSlideOffset: Float =
+        0.toFloat() // How far the panel is offset from its expanded position. range [0, 1] where 0 = collapsed, 1 = expanded.
     private var mSlideRange: Int = 0 // How far in pixels the slideable panel may move.
     private var mAnchorPoint = 1f // An anchor point where the panel can stop during sliding
-    private var mIsUnableToDrag: Boolean = false // A panel view is locked into internal scrolling or another condition that is preventing a drag.
+    private var mIsUnableToDrag: Boolean =
+        false // A panel view is locked into internal scrolling or another condition that is preventing a drag.
     private var mIsTouchEnabled: Boolean = false // Flag indicating that sliding feature is enabled\disabled
 
     private var mPrevMotionX: Float = 0.toFloat()
@@ -116,7 +127,8 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
                     mShadowHeight = ta.getDimensionPixelSize(R.styleable.SlidingUpPanelLayout_umanoShadowHeight, -1)
                     mParallaxOffset = ta.getDimensionPixelSize(R.styleable.SlidingUpPanelLayout_umanoParallaxOffset, -1)
 
-                    mMinFlingVelocity = ta.getInt(R.styleable.SlidingUpPanelLayout_umanoFlingVelocity, DEFAULT_MIN_FLING_VELOCITY)
+                    mMinFlingVelocity =
+                        ta.getInt(R.styleable.SlidingUpPanelLayout_umanoFlingVelocity, DEFAULT_MIN_FLING_VELOCITY)
                     mCoveredFadeColor = ta.getColor(R.styleable.SlidingUpPanelLayout_umanoFadeColor, DEFAULT_FADE_COLOR)
 
                     mDragViewResId = ta.getResourceId(R.styleable.SlidingUpPanelLayout_umanoDragView, -1)
@@ -127,9 +139,13 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
 
                     mAnchorPoint = ta.getFloat(R.styleable.SlidingUpPanelLayout_umanoAnchorPoint, DEFAULT_ANCHOR_POINT)
 
-                    mSlideState = PanelState.values()[ta.getInt(R.styleable.SlidingUpPanelLayout_umanoInitialState, DEFAULT_SLIDE_STATE.ordinal)]
+                    mSlideState = PanelState.values()[ta.getInt(
+                        R.styleable.SlidingUpPanelLayout_umanoInitialState,
+                        DEFAULT_SLIDE_STATE.ordinal
+                    )]
 
-                    val interpolatorResId = ta.getResourceId(R.styleable.SlidingUpPanelLayout_umanoScrollInterpolator, -1)
+                    val interpolatorResId =
+                        ta.getResourceId(R.styleable.SlidingUpPanelLayout_umanoScrollInterpolator, -1)
                     if (interpolatorResId != -1) {
                         scrollerInterpolator = AnimationUtils.loadInterpolator(context, interpolatorResId)
                     }
@@ -487,7 +503,8 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
         val clampedChildBottom = Math.min(bottomBound, child.bottom)
         val vis: Int
         vis = if (clampedChildLeft >= left && clampedChildTop >= top &&
-                clampedChildRight <= right && clampedChildBottom <= bottom) {
+            clampedChildRight <= right && clampedChildBottom <= bottom
+        ) {
             View.INVISIBLE
         } else {
             View.VISIBLE
@@ -579,8 +596,14 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
             }
 
             val childWidthSpec = when {
-                lp.width == ViewGroup.LayoutParams.WRAP_CONTENT -> View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST)
-                lp.width == ViewGroup.LayoutParams.MATCH_PARENT -> View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY)
+                lp.width == ViewGroup.LayoutParams.WRAP_CONTENT -> View.MeasureSpec.makeMeasureSpec(
+                    width,
+                    View.MeasureSpec.AT_MOST
+                )
+                lp.width == ViewGroup.LayoutParams.MATCH_PARENT -> View.MeasureSpec.makeMeasureSpec(
+                    width,
+                    View.MeasureSpec.EXACTLY
+                )
                 else -> View.MeasureSpec.makeMeasureSpec(lp.width, View.MeasureSpec.EXACTLY)
             }
 
@@ -713,8 +736,13 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
                 }
                 // Check if this was a click on the faded part of the screen, and fire off the listener if there is one.
                 if (ady <= dragSlop
-                        && adx <= dragSlop
-                        && mSlideOffset > 0 && !isViewUnder(mSlideableView, mInitialMotionX.toInt(), mInitialMotionY.toInt()) && mFadeOnClickListener != null) {
+                    && adx <= dragSlop
+                    && mSlideOffset > 0 && !isViewUnder(
+                        mSlideableView,
+                        mInitialMotionX.toInt(),
+                        mInitialMotionY.toInt()
+                    ) && mFadeOnClickListener != null
+                ) {
                     playSoundEffect(android.view.SoundEffectConstants.CLICK)
                     mFadeOnClickListener!!.onClick(this)
                     return true
@@ -814,7 +842,7 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
             }
         }
 
-        // In all other cases, just let the default behavior take over.
+        // In all other cases, just let the DEFAULT behavior take over.
         return super.dispatchTouchEvent(ev)
     }
 
@@ -878,11 +906,11 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
 
         // Abort any running animation, to allow state change
         if (mDragHelper!!.getViewDragState() == ViewDragHelper.STATE_SETTLING) {
-            LLog.debug(javaClass, "VerticalDrawer : View is settling. Aborting animation.")
+            logger.debug("VerticalDrawer : View is settling. Aborting animation.")
             mDragHelper!!.abort()
         }
 
-        LLog.debug(javaClass, "VerticalDrawer : Really changing")
+        logger.debug("VerticalDrawer : Really changing")
 
         if (mFirstLayout) {
             setPanelStateInternal(state)
@@ -940,7 +968,8 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
 
         if (mSlideOffset <= 0 && !mOverlayContent) {
             // expand the main view
-            lp.height = if (mIsSlidingUp) newTop - paddingBottom else height - paddingBottom - mSlideableView!!.measuredHeight - newTop
+            lp.height =
+                if (mIsSlidingUp) newTop - paddingBottom else height - paddingBottom - mSlideableView!!.measuredHeight - newTop
             if (lp.height == defaultHeight) {
                 lp.height = ViewGroup.LayoutParams.MATCH_PARENT
             }
@@ -1058,9 +1087,12 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
             for (i in count - 1 downTo 0) {
                 val child = v.getChildAt(i)
                 if (x + scrollX >= child.left && x + scrollX < child.right &&
-                        y + scrollY >= child.top && y + scrollY < child.bottom &&
-                        canScroll(child, true, dx, x + scrollX - child.left,
-                                y + scrollY - child.top)) {
+                    y + scrollY >= child.top && y + scrollY < child.bottom &&
+                    canScroll(
+                        child, true, dx, x + scrollX - child.left,
+                        y + scrollY - child.top
+                    )
+                ) {
                     return true
                 }
             }
@@ -1091,7 +1123,10 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
     public override fun onSaveInstanceState(): Parcelable? {
         val bundle = Bundle()
         bundle.putParcelable("superState", super.onSaveInstanceState())
-        bundle.putSerializable(BUNDLE_SLIDING_STATE, if (mSlideState != PanelState.DRAGGING) mSlideState else mLastNotDraggingSlideState)
+        bundle.putSerializable(
+            BUNDLE_SLIDING_STATE,
+            if (mSlideState != PanelState.DRAGGING) mSlideState else mLastNotDraggingSlideState
+        )
         return bundle
     }
 
@@ -1145,7 +1180,8 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
         }
 
         override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
-            val direction = if (mIsSlidingUp) -yvel else yvel // direction is always positive if we are sliding in the expanded direction
+            val direction =
+                if (mIsSlidingUp) -yvel else yvel // direction is always positive if we are sliding in the expanded direction
 
             val target = if (direction > 0 && mSlideOffset <= mAnchorPoint) {
                 computePanelTopPosition(mAnchorPoint) // swipe up -> expand and stop at anchor point
@@ -1225,11 +1261,14 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
         private const val DEFAULT_ANCHOR_POINT = 1.0f // Default anchor point height // In relative %
         private val DEFAULT_SLIDE_STATE = PanelState.COLLAPSED // Default initial state for the component
         private const val DEFAULT_SHADOW_HEIGHT = 4 // Default height of the shadow above the peeking out panel // dp;
-        private const val DEFAULT_FADE_COLOR = -0x67000000 // If no fade color is given by default it will fade to 80% gray.
+        private const val DEFAULT_FADE_COLOR =
+            -0x67000000 // If no fade color is given by DEFAULT it will fade to 80% gray.
         private const val DEFAULT_PARALLAX_OFFSET = 0 // Default parallax length of the main view
-        private const val DEFAULT_MIN_FLING_VELOCITY = 400 // Default Minimum velocity that will be detected as a fling // dips per second
+        private const val DEFAULT_MIN_FLING_VELOCITY =
+            400 // Default Minimum velocity that will be detected as a fling // dips per second
         private const val DEFAULT_OVERLAY_FLAG = false // Default is set to false because that is how it was written
-        private const val DEFAULT_CLIP_PANEL_FLAG = true // Default is set to true for clip panel for performance reasons
+        private const val DEFAULT_CLIP_PANEL_FLAG =
+            true // Default is set to true for clip panel for performance reasons
         private val DEFAULT_ATTRS = intArrayOf(android.R.attr.gravity) // Default attributes for layout
         const val BUNDLE_SLIDING_STATE = "sliding_state" // Tag for the sliding state stored inside the bundle
     }

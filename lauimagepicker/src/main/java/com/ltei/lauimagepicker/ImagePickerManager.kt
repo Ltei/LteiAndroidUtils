@@ -5,16 +5,13 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.support.v4.app.Fragment
-import com.ltei.ljubase.LException
-import com.ltei.ljubase.Result
-import com.ltei.lauimagepicker.CropImage
+import androidx.fragment.app.Fragment
 import java8.util.concurrent.CompletableFuture
 
 
 class ImagePickerManager(val fragment: Fragment, val startImagePickerActivity: () -> Unit) {
 
-    private var mCurrentFuture: CompletableFuture<Result<Uri, Throwable>>? = null
+    private var mCurrentFuture: CompletableFuture<Uri>? = null
     private var mCropImageUri: Uri? = null
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
@@ -25,14 +22,14 @@ class ImagePickerManager(val fragment: Fragment, val startImagePickerActivity: (
                 if (CropImage.isReadExternalStoragePermissionsRequired(fragment.requireContext(), imageUri)) {
                     mCropImageUri = imageUri
                     fragment.requestPermissions(
-                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                            CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE
                     )
                 } else {
                     if (mCurrentFuture == null) {
                         IllegalStateException().printStackTrace()
                     } else {
-                        mCurrentFuture!!.complete(Result.ok(imageUri))
+                        mCurrentFuture!!.complete(imageUri)
                         mCurrentFuture = null
                         mCropImageUri = null
                     }
@@ -42,7 +39,7 @@ class ImagePickerManager(val fragment: Fragment, val startImagePickerActivity: (
                 if (mCurrentFuture == null) {
                     IllegalStateException().printStackTrace()
                 } else {
-                    mCurrentFuture!!.complete(Result.err(LException(error.localizedMessage)))
+                    mCurrentFuture!!.completeExceptionally(IllegalStateException(error.localizedMessage))
                     mCurrentFuture = null
                     mCropImageUri = null
                 }
@@ -62,7 +59,7 @@ class ImagePickerManager(val fragment: Fragment, val startImagePickerActivity: (
                     if (mCurrentFuture == null) {
                         IllegalStateException().printStackTrace()
                     } else {
-                        mCurrentFuture!!.complete(Result.err(LException("Cancelling, required permissions are not granted 1")))
+                        mCurrentFuture!!.completeExceptionally(IllegalStateException("Cancelling, required permissions are not granted 1"))
                         mCurrentFuture = null
                         mCropImageUri = null
                     }
@@ -74,11 +71,11 @@ class ImagePickerManager(val fragment: Fragment, val startImagePickerActivity: (
                     IllegalStateException().printStackTrace()
                 } else {
                     if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        mCurrentFuture!!.complete(Result.ok(mCropImageUri!!))
+                        mCurrentFuture!!.complete(mCropImageUri!!)
                         mCurrentFuture = null
                         mCropImageUri = null
                     } else {
-                        mCurrentFuture!!.complete(Result.err(LException("Cancelling, required permissions are not granted 2")))
+                        mCurrentFuture!!.completeExceptionally(IllegalStateException("Cancelling, required permissions are not granted 2"))
                         mCurrentFuture = null
                         mCropImageUri = null
                     }
@@ -89,8 +86,8 @@ class ImagePickerManager(val fragment: Fragment, val startImagePickerActivity: (
         }
     }
 
-    fun pickImage(): CompletableFuture<Result<Uri, Throwable>> {
-        return CompletableFuture<Result<Uri, Throwable>>().also {
+    fun pickImage(): CompletableFuture<Uri> {
+        return CompletableFuture<Uri>().also {
             mCurrentFuture = it
             startImagePickerActivity.invoke()
         }

@@ -1,36 +1,37 @@
 package com.ltei.laustate
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.View
 import android.view.animation.AnimationUtils
-import com.ltei.ljubase.LLog
+import androidx.fragment.app.Fragment
+import com.ltei.ljubase.Logger
 
 abstract class State(
-        val inAnimationId: Int = android.R.anim.fade_in,
-        val outAnimationId: Int = android.R.anim.fade_out
+    val inAnimationId: Int = android.R.anim.fade_in,
+    val outAnimationId: Int = android.R.anim.fade_out
 ) : Fragment() {
 
+    private val logger = Logger(State::class.java)
     var stateView: View? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        LLog.info(this.javaClass)
+        logger.debug()
         super.onViewCreated(view, savedInstanceState)
         view.startAnimation(AnimationUtils.loadAnimation(context, inAnimationId))
     }
 
     override fun onResume() {
-        LLog.info(this.javaClass)
+        logger.debug()
         super.onResume()
     }
 
     override fun onPause() {
-        LLog.info(this.javaClass)
+        logger.debug()
         super.onPause()
     }
 
     open fun onBackPressed(): Boolean {
-        LLog.info(this.javaClass)
+        logger.debug()
         return false
     }
 

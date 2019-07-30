@@ -7,7 +7,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.support.annotation.RequiresPermission
+import androidx.annotation.RequiresPermission
 
 class SimpleGeoLocationManager
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
@@ -80,7 +80,12 @@ constructor(private val context: Context) : GeoLocationManager {
                 }
                 locationManager.allProviders.contains(LocationManager.NETWORK_PROVIDER) -> {
                     currentLocationProvider = LocationManager.NETWORK_PROVIDER
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 10f, mLocationListener)
+                    locationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER,
+                        100,
+                        10f,
+                        mLocationListener
+                    )
                     currentLocationVar = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                 }
                 else -> noProvider = true

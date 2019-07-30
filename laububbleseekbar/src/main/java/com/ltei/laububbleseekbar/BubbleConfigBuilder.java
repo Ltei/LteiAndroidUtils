@@ -1,7 +1,7 @@
 package com.ltei.laububbleseekbar;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.IntRange;
+import androidx.annotation.ColorInt;
+import androidx.annotation.IntRange;
 
 import static com.ltei.laububbleseekbar.BubbleUtils.dp2px;
 import static com.ltei.laububbleseekbar.BubbleUtils.sp2px;

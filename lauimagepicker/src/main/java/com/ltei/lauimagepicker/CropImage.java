@@ -21,24 +21,18 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
+import android.graphics.*;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
 
 import java.io.File;
 import java.io.InputStream;
@@ -231,7 +225,7 @@ public final class CropImage {
 
     /**
      * Get the main Camera intent for capturing image using device camera app. If the outputFileUri is
-     * null, a default Uri will be created with {@link #getCaptureImageOutputUri(Context)}, so then
+     * null, a DEFAULT Uri will be created with {@link #getCaptureImageOutputUri(Context)}, so then
      * you will be able to get the pictureUri using {@link #getPickImageResultUri(Context, Intent)}.
      * Otherwise, it is just you use the Uri passed to this method.
      *
@@ -617,7 +611,7 @@ public final class CropImage {
         /**
          * if to show crop overlay UI what contains the crop window UI surrounded by background over the
          * cropping image.<br>
-         * <i>default: true, may disable for animation or frame transition.</i>
+         * <i>DEFAULT: true, may disable for animation or frame transition.</i>
          */
         public ActivityBuilder setShowCropOverlay(boolean showCropOverlay) {
             mOptions.showCropOverlay = showCropOverlay;
@@ -626,7 +620,7 @@ public final class CropImage {
 
         /**
          * if auto-zoom functionality is enabled.<br>
-         * default: true.
+         * DEFAULT: true.
          */
         public ActivityBuilder setAutoZoomEnabled(boolean autoZoomEnabled) {
             mOptions.autoZoomEnabled = autoZoomEnabled;
@@ -635,7 +629,7 @@ public final class CropImage {
 
         /**
          * if multi touch functionality is enabled.<br>
-         * default: true.
+         * DEFAULT: true.
          */
         public ActivityBuilder setMultiTouchEnabled(boolean multiTouchEnabled) {
             mOptions.multiTouchEnabled = multiTouchEnabled;

@@ -51,12 +51,12 @@ object LViews {
         return view
     }
 
-    fun forEachChild(root: ViewGroup, forEach: (View) -> Unit) {
+    fun forEachChild(root: ViewGroup, block: (View) -> Unit) {
         for (i in 0 until root.childCount) {
             root.getChildAt(i).let {
-                forEach(it)
+                block(it)
                 if (it is ViewGroup) {
-                    forEachChild(it, forEach)
+                    forEachChild(it, block)
                 }
             }
         }

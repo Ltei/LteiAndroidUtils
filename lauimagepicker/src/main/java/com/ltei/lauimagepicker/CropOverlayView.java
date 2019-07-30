@@ -312,7 +312,7 @@ public class CropOverlayView extends View {
   /**
    * An edge of the crop window will snap to the corresponding edge of a specified bounding box when
    * the crop window edge is less than or equal to this distance (in pixels) away from the bounding
-   * box edge. (default: 3)
+   * box edge. (DEFAULT: 3)
    */
   public void setSnapRadius(float snapRadius) {
     mSnapRadius = snapRadius;
@@ -361,7 +361,7 @@ public class CropOverlayView extends View {
     return mInitialCropWindowRect;
   }
 
-  /** Set crop window initial rectangle to be used instead of default. */
+  /** Set crop window initial rectangle to be used instead of DEFAULT. */
   public void setInitialCropWindowRect(Rect rect) {
     mInitialCropWindowRect.set(rect != null ? rect : BitmapUtils.EMPTY_RECT);
     if (initializedCropWindow) {

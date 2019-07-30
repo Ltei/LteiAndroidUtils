@@ -2,32 +2,31 @@ package com.ltei.lauutils
 
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.support.v4.app.ActivityCompat
-import com.ltei.ljubase.Result
+import androidx.core.app.ActivityCompat
 import java8.util.concurrent.CompletableFuture
 
 class PermissionsManager(
-        private val activity: Activity,
-        initialRequestCode: Int
+    private val activity: Activity,
+    initialRequestCode: Int
 ) {
 
     private class AwaitingPermissions(
-            val permissions: Array<String>,
-            val future: CompletableFuture<Result<Array<String>, IntArray>>
+        val permissions: Array<String>,
+        val future: CompletableFuture<Array<String>>
     )
 
     private val mAwaitingPermissions = mutableMapOf<Int, AwaitingPermissions>()
     private var mNextRequestCode = initialRequestCode
 
-    fun assertPermission(permission: String): CompletableFuture<Result<Array<String>, IntArray>> {
+    fun assertPermission(permission: String): CompletableFuture<Array<String>> {
         return assertPermissions(arrayOf(permission))
     }
 
-    fun assertPermissions(permissions: Array<String>): CompletableFuture<Result<Array<String>, IntArray>> {
+    fun assertPermissions(permissions: Array<String>): CompletableFuture<Array<String>> {
         if (areAllGranted(permissions)) {
-            return CompletableFuture.completedFuture(Result.ok(permissions))
+            return CompletableFuture.completedFuture(permissions)
         }
-        val future = CompletableFuture<Result<Array<String>, IntArray>>()
+        val future = CompletableFuture<Array<String>>()
         val awaiting = AwaitingPermissions(permissions, future)
         mAwaitingPermissions[mNextRequestCode] = awaiting
         ActivityCompat.requestPermissions(activity, permissions, mNextRequestCode)
@@ -39,9 +38,9 @@ class PermissionsManager(
         val awaiting = mAwaitingPermissions[requestCode]
         return if (awaiting != null) {
             if (areAllGranted(awaiting.permissions)) {
-                awaiting.future.complete(Result.ok(awaiting.permissions))
+                awaiting.future.complete(awaiting.permissions)
             } else {
-                awaiting.future.complete(Result.err(grantResults))
+                awaiting.future.completeExceptionally(Exception())
             }
             true
         } else {
@@ -51,7 +50,7 @@ class PermissionsManager(
 
     private fun areAllGranted(permissions: Array<String>): Boolean {
         return permissions.all {
-            ActivityCompat.checkSelfPermission(activity, it) == PackageManager.PERMISSION_GRANTED 
+            ActivityCompat.checkSelfPermission(activity, it) == PackageManager.PERMISSION_GRANTED
         }
     }
 }

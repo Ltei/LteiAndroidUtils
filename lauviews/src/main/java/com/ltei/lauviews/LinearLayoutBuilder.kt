@@ -111,7 +111,7 @@ open class LinearLayoutBuilder(val root: LinearLayout) {
     /*fun datePicker(): DatePicker {
         assertIsNotBuild()
         val view = dialog.layoutInflater.inflate(R.layout.view_datepicker_spinner, null) as DatePicker
-        root.addView(view)
+        objectView.addView(view)
         return view
     }*/
 

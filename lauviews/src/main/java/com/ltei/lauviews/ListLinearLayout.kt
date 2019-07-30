@@ -1,7 +1,6 @@
 package com.ltei.lauviews
 
 import android.content.Context
-import android.support.annotation.Nullable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -9,6 +8,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.Nullable
 import com.ltei.lauutils.LUnits
 
 open class ListLinearLayout : LinearLayout {
@@ -78,27 +78,33 @@ open class ListLinearLayout : LinearLayout {
         return separator
     }
 
-    fun setupAll(list: List<Any>,
-                 orientation: Int = LinearLayout.VERTICAL,
-                 separatorColor: Int? = null,
-                 separatorSize: Int = 1,
-                 separatorAtStart: Boolean = false,
-                 separatorAtEnd: Boolean = false,
-                 viewText: ((Any) -> String)? = null,
-                 onClick: ((Any, Int) -> Unit)? = null,
-                 viewHeight: Int = LUnits.dpToPx(context.resources, 50),
-                 viewColor: Int? = null) {
-        setupAll(list, orientation, separatorColor, separatorSize, separatorAtStart, separatorAtEnd,
-                getDefaultViewCreator(viewText, onClick, viewHeight, color = viewColor))
+    fun setupAll(
+        list: List<Any>,
+        orientation: Int = LinearLayout.VERTICAL,
+        separatorColor: Int? = null,
+        separatorSize: Int = 1,
+        separatorAtStart: Boolean = false,
+        separatorAtEnd: Boolean = false,
+        viewText: ((Any) -> String)? = null,
+        onClick: ((Any, Int) -> Unit)? = null,
+        viewHeight: Int = LUnits.dpToPx(context.resources, 50),
+        viewColor: Int? = null
+    ) {
+        setupAll(
+            list, orientation, separatorColor, separatorSize, separatorAtStart, separatorAtEnd,
+            getDefaultViewCreator(viewText, onClick, viewHeight, color = viewColor)
+        )
     }
 
-    fun setupAll(list: List<Any>,
-                 orientation: Int = LinearLayout.VERTICAL,
-                 separatorColor: Int? = null,
-                 separatorSize: Int = 1,
-                 separatorAtStart: Boolean = false,
-                 separatorAtEnd: Boolean = false,
-                 viewCreator: ViewCreator) {
+    fun setupAll(
+        list: List<Any>,
+        orientation: Int = LinearLayout.VERTICAL,
+        separatorColor: Int? = null,
+        separatorSize: Int = 1,
+        separatorAtStart: Boolean = false,
+        separatorAtEnd: Boolean = false,
+        viewCreator: ViewCreator
+    ) {
         this.orientation = orientation
         this.separatorColor = separatorColor
         this.separatorSize = separatorSize
@@ -109,23 +115,23 @@ open class ListLinearLayout : LinearLayout {
     }
 
     fun setDefaultViewCreator(
-            viewText: ((Any) -> String)? = null,
-            onClick: ((Any, Int) -> Unit)? = null,
-            height: Int = LUnits.dpToPx(context.resources, 50),
-            padding: Int = 0,
-            gravity: Int = Gravity.CENTER,
-            color: Int? = null
+        viewText: ((Any) -> String)? = null,
+        onClick: ((Any, Int) -> Unit)? = null,
+        height: Int = LUnits.dpToPx(context.resources, 50),
+        padding: Int = 0,
+        gravity: Int = Gravity.CENTER,
+        color: Int? = null
     ) {
         this.viewCreator = getDefaultViewCreator(viewText, onClick, height, padding, gravity, color)
     }
 
     private fun getDefaultViewCreator(
-            viewText: ((Any) -> String)? = null,
-            onClick: ((Any, Int) -> Unit)? = null,
-            height: Int = LUnits.dpToPx(context.resources, 50),
-            padding: Int = 0,
-            gravity: Int = Gravity.CENTER,
-            color: Int? = null
+        viewText: ((Any) -> String)? = null,
+        onClick: ((Any, Int) -> Unit)? = null,
+        height: Int = LUnits.dpToPx(context.resources, 50),
+        padding: Int = 0,
+        gravity: Int = Gravity.CENTER,
+        color: Int? = null
     ): ViewCreator {
         return object : ViewCreator {
             override fun createView(item: Any, itemPosition: Int): View {
