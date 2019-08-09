@@ -6,13 +6,13 @@ import androidx.core.app.ActivityCompat
 import java8.util.concurrent.CompletableFuture
 
 class PermissionsManager(
-    private val activity: Activity,
-    initialRequestCode: Int
+        private val activity: Activity,
+        initialRequestCode: Int
 ) {
 
     private class AwaitingPermissions(
-        val permissions: Array<String>,
-        val future: CompletableFuture<Array<String>>
+            val permissions: Array<String>,
+            val future: CompletableFuture<Array<String>>
     )
 
     private val mAwaitingPermissions = mutableMapOf<Int, AwaitingPermissions>()
@@ -23,7 +23,7 @@ class PermissionsManager(
     }
 
     fun assertPermissions(permissions: Array<String>): CompletableFuture<Array<String>> {
-        if (areAllGranted(permissions)) {
+        if (areGranted(*permissions)) {
             return CompletableFuture.completedFuture(permissions)
         }
         val future = CompletableFuture<Array<String>>()
@@ -34,10 +34,10 @@ class PermissionsManager(
         return future
     }
 
-    fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray): Boolean {
+    fun onRequestPermissionsResult(requestCode: Int): Boolean {
         val awaiting = mAwaitingPermissions[requestCode]
         return if (awaiting != null) {
-            if (areAllGranted(awaiting.permissions)) {
+            if (areGranted(*awaiting.permissions)) {
                 awaiting.future.complete(awaiting.permissions)
             } else {
                 awaiting.future.completeExceptionally(Exception())
@@ -48,9 +48,8 @@ class PermissionsManager(
         }
     }
 
-    private fun areAllGranted(permissions: Array<String>): Boolean {
-        return permissions.all {
-            ActivityCompat.checkSelfPermission(activity, it) == PackageManager.PERMISSION_GRANTED
-        }
+    fun areGranted(vararg permissions: String): Boolean = permissions.all {
+        ActivityCompat.checkSelfPermission(activity, it) == PackageManager.PERMISSION_GRANTED
     }
+
 }

@@ -20,7 +20,7 @@ class StateManager(
 
     val backstack: List<State> get() = mBackstack
     val currentState: State get() = mBackstack.last()
-    val isStateHome: Boolean get() = mBackstack.size == 1
+    val isRootStateOnTop: Boolean get() = mBackstack.size == 1
 
 
     fun setState(state: State) {

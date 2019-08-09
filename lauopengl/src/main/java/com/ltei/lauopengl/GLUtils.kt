@@ -2,10 +2,12 @@ package com.ltei.lauopengl
 
 import android.opengl.GLES20
 import android.util.Log
-import com.ltei.ljubase.LLog
+import com.ltei.ljubase.Logger
 import java.nio.*
 
 object GLUtils {
+
+    private val logger = Logger(GLUtils::class.java)
 
     fun createFloatBuffer(capacity: Int): FloatBuffer {
         val result = ByteBuffer.allocateDirect(4 * capacity)
@@ -39,10 +41,10 @@ object GLUtils {
             GLES20.glGetShaderiv(shader, GLES20.GL_INFO_LOG_LENGTH, buffer)
             status = buffer.get(0)
             if (status > 1) {
-                LLog.debug(javaClass, "Vertex Shader: " + GLES20.glGetShaderInfoLog(shader))
+                logger.debug("Vertex Shader: " + GLES20.glGetShaderInfoLog(shader))
             }
             GLES20.glDeleteShader(shader)
-            LLog.debug(javaClass, "Vertex Shader error.")
+            logger.debug("Vertex Shader error.")
         }
 
         return shader

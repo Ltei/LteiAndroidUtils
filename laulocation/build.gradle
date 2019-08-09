@@ -33,7 +33,7 @@ repositories {
 dependencies {
     implementation kotlin_compile_path
 
-    implementation "com.android.support:appcompat-v7:$android_support_version"
+    implementation "androidx.appcompat:appcompat:$androidx_version"
 
     implementation project(':ljubase')
     implementation project(':ljuutils')

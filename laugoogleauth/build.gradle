@@ -30,14 +30,14 @@ repositories {
 
 dependencies {
     implementation kotlin_compile_path
-    
-    implementation "com.android.support:appcompat-v7:$android_support_version"
-    implementation "com.android.support:support-media-compat:$android_support_version"
-    implementation "com.android.support:support-v4:$android_support_version"
+    implementation cfuture_compile_path
 
-    implementation "com.google.android.gms:play-services-auth:$play_services_version" // todo
+    implementation "androidx.appcompat:appcompat:$androidx_version"
 
-    implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0' // TODO REMOVE
+    implementation "com.google.android.gms:play-services-auth:$play_services_version"
+
+//    implementation "com.android.support:support-media-compat:$android_support_version"
+//    implementation "com.android.support:support-v4:$android_support_version"
 
     implementation project(':ljubase')
 }

@@ -28,9 +28,10 @@ repositories {
 dependencies {
     implementation kotlin_compile_path
 
-    implementation "com.android.support:appcompat-v7:$android_support_version"
-    implementation "com.android.support:support-v4:$android_support_version"
-    implementation "com.android.support:support-media-compat:$android_support_version"
+    implementation "androidx.appcompat:appcompat:$androidx_version"
+
+//    implementation "com.android.support:support-v4:$android_support_version"
+//    implementation "com.android.support:support-media-compat:$android_support_version"
 
     implementation "com.google.android.gms:play-services-maps:$play_services_version"
 }

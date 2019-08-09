@@ -3,7 +3,6 @@ package com.ltei.lauviews
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
 import android.widget.LinearLayout
@@ -14,24 +13,24 @@ class ButtonBar : LinearLayout {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     constructor(
-        context: Context, buttons: Array<Pair<String, View.OnClickListener?>>,
-        tint: Int = Color.WHITE, textColor: Int = Color.BLACK
+            context: Context, buttons: Array<Pair<String, OnClickListener?>>,
+            tint: Int = Color.WHITE, textColor: Int = Color.BLACK
     ) : super(context) {
         setButtons(buttons, tint, textColor)
     }
 
     init {
-        orientation = LinearLayout.HORIZONTAL
+        orientation = HORIZONTAL
     }
 
     fun setButtons(
-        buttons: Array<Pair<String, View.OnClickListener?>>,
-        tint: Int = Color.WHITE,
-        textColor: Int = Color.BLACK
+            buttons: Array<Pair<String, OnClickListener?>>,
+            tint: Int = Color.WHITE,
+            textColor: Int = Color.BLACK
     ) {
         for ((title, onClick) in buttons) {
             val buttonView = Button(context)
-            buttonView.layoutParams = LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f)
+            buttonView.layoutParams = LayoutParams(0, WRAP_CONTENT, 1f)
             buttonView.text = title
             buttonView.setTextColor(textColor)
             buttonView.background.setTint(tint)
@@ -46,35 +45,36 @@ class ButtonBar : LinearLayout {
 
 }
 
-class DEPRECATED_ButtonBar : LinearLayout {
+@Deprecated("Use ButtonBar instead")
+class OldButtonBar : LinearLayout { // TODO REMOVE
 
     constructor(
-        context: Context,
-        buttons: Array<Pair<String, () -> Unit>>,
-        tint: Int = Color.WHITE,
-        textColor: Int = Color.BLACK
+            context: Context,
+            buttons: Array<Pair<String, () -> Unit>>,
+            tint: Int = Color.WHITE,
+            textColor: Int = Color.BLACK
     ) : super(context) {
         init(context, buttons, tint, textColor)
     }
 
     constructor(context: Context, attrs: AttributeSet, buttons: Array<Pair<String, () -> Unit>>) : super(
-        context,
-        attrs
+            context,
+            attrs
     ) {
         init(context, buttons)
     }
 
     private fun init(
-        context: Context,
-        buttons: Array<Pair<String, () -> Unit>>,
-        tint: Int = Color.WHITE,
-        textColor: Int = Color.BLACK
+            context: Context,
+            buttons: Array<Pair<String, () -> Unit>>,
+            tint: Int = Color.WHITE,
+            textColor: Int = Color.BLACK
     ) {
-        orientation = LinearLayout.HORIZONTAL
+        orientation = HORIZONTAL
 
         for (button in buttons) {
             val buttonView = Button(context)
-            buttonView.layoutParams = LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f)
+            buttonView.layoutParams = LayoutParams(0, WRAP_CONTENT, 1f)
             buttonView.text = button.first
             buttonView.setTextColor(textColor)
             buttonView.background.setTint(tint)

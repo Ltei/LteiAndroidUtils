@@ -7,17 +7,17 @@ import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 
 class LNotification(
-    val context: Context,
-    val notificationId: Int,
-    val contentTitle: String,
-    val contentText: String,
-    val ticker: String,
-    val smallIconResId: Int,
-    val backgroundColor: Int = Color.WHITE
+        val context: Context,
+        val notificationId: Int,
+        val contentTitle: String,
+        val contentText: String,
+        val ticker: String,
+        val smallIconResId: Int,
+        val backgroundColor: Int = Color.WHITE
 ) {
 
     companion object {
@@ -27,7 +27,7 @@ class LNotification(
         private const val CHANNEL_DESCRIPTION = "channel_description"
 
         fun getManager(context: Context): NotificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         fun getCompatManager(context: Context): NotificationManagerCompat = NotificationManagerCompat.from(context)
 
@@ -60,22 +60,22 @@ class LNotification(
     }
 
     private fun buildNotification(
-        autoCancel: Boolean,
-        ongoing: Boolean,
-        onTapIntent: PendingIntent? = null
+            autoCancel: Boolean,
+            ongoing: Boolean,
+            onTapIntent: PendingIntent? = null
     ): Notification {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
 
         builder.setDefaults(Notification.DEFAULT_ALL)
-            .setContentTitle(contentTitle)                           // required
-            .setColor(backgroundColor)
-            .setSmallIcon(smallIconResId) // required
-            .setContentText(contentText)  // required
-            .setAutoCancel(autoCancel)
-            .setTicker(ticker)
-            .setOngoing(ongoing)
-            .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400))
-            .priority = getImportance()
+                .setContentTitle(contentTitle)                           // required
+                .setColor(backgroundColor)
+                .setSmallIcon(smallIconResId) // required
+                .setContentText(contentText)  // required
+                .setAutoCancel(autoCancel)
+                .setTicker(ticker)
+                .setOngoing(ongoing)
+                .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400))
+                .priority = getImportance()
         if (onTapIntent != null)
             builder.setContentIntent(onTapIntent)
 

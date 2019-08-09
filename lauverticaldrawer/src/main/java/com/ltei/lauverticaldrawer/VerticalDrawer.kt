@@ -112,45 +112,39 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
             var scrollerInterpolator: Interpolator? = null
             if (attrs != null) {
                 val defAttrs = context.obtainStyledAttributes(attrs, DEFAULT_ATTRS)
-
-                if (defAttrs != null) {
-                    val gravity = defAttrs.getInt(0, Gravity.NO_GRAVITY)
-                    setGravity(gravity)
-                    defAttrs.recycle()
-                }
+                val gravity = defAttrs.getInt(0, Gravity.NO_GRAVITY)
+                setGravity(gravity)
+                defAttrs.recycle()
 
 
                 val ta = context.obtainStyledAttributes(attrs, R.styleable.SlidingUpPanelLayout)
+                mPanelHeight = ta.getDimensionPixelSize(R.styleable.SlidingUpPanelLayout_umanoPanelHeight, -1)
+                mShadowHeight = ta.getDimensionPixelSize(R.styleable.SlidingUpPanelLayout_umanoShadowHeight, -1)
+                mParallaxOffset = ta.getDimensionPixelSize(R.styleable.SlidingUpPanelLayout_umanoParallaxOffset, -1)
 
-                if (ta != null) {
-                    mPanelHeight = ta.getDimensionPixelSize(R.styleable.SlidingUpPanelLayout_umanoPanelHeight, -1)
-                    mShadowHeight = ta.getDimensionPixelSize(R.styleable.SlidingUpPanelLayout_umanoShadowHeight, -1)
-                    mParallaxOffset = ta.getDimensionPixelSize(R.styleable.SlidingUpPanelLayout_umanoParallaxOffset, -1)
+                mMinFlingVelocity =
+                    ta.getInt(R.styleable.SlidingUpPanelLayout_umanoFlingVelocity, DEFAULT_MIN_FLING_VELOCITY)
+                mCoveredFadeColor = ta.getColor(R.styleable.SlidingUpPanelLayout_umanoFadeColor, DEFAULT_FADE_COLOR)
 
-                    mMinFlingVelocity =
-                        ta.getInt(R.styleable.SlidingUpPanelLayout_umanoFlingVelocity, DEFAULT_MIN_FLING_VELOCITY)
-                    mCoveredFadeColor = ta.getColor(R.styleable.SlidingUpPanelLayout_umanoFadeColor, DEFAULT_FADE_COLOR)
+                mDragViewResId = ta.getResourceId(R.styleable.SlidingUpPanelLayout_umanoDragView, -1)
+                mScrollableViewResId = ta.getResourceId(R.styleable.SlidingUpPanelLayout_umanoScrollableView, -1)
 
-                    mDragViewResId = ta.getResourceId(R.styleable.SlidingUpPanelLayout_umanoDragView, -1)
-                    mScrollableViewResId = ta.getResourceId(R.styleable.SlidingUpPanelLayout_umanoScrollableView, -1)
+                mOverlayContent = ta.getBoolean(R.styleable.SlidingUpPanelLayout_umanoOverlay, DEFAULT_OVERLAY_FLAG)
+                mClipPanel = ta.getBoolean(R.styleable.SlidingUpPanelLayout_umanoClipPanel, DEFAULT_CLIP_PANEL_FLAG)
 
-                    mOverlayContent = ta.getBoolean(R.styleable.SlidingUpPanelLayout_umanoOverlay, DEFAULT_OVERLAY_FLAG)
-                    mClipPanel = ta.getBoolean(R.styleable.SlidingUpPanelLayout_umanoClipPanel, DEFAULT_CLIP_PANEL_FLAG)
+                mAnchorPoint = ta.getFloat(R.styleable.SlidingUpPanelLayout_umanoAnchorPoint, DEFAULT_ANCHOR_POINT)
 
-                    mAnchorPoint = ta.getFloat(R.styleable.SlidingUpPanelLayout_umanoAnchorPoint, DEFAULT_ANCHOR_POINT)
+                mSlideState = PanelState.values()[ta.getInt(
+                    R.styleable.SlidingUpPanelLayout_umanoInitialState,
+                    DEFAULT_SLIDE_STATE.ordinal
+                )]
 
-                    mSlideState = PanelState.values()[ta.getInt(
-                        R.styleable.SlidingUpPanelLayout_umanoInitialState,
-                        DEFAULT_SLIDE_STATE.ordinal
-                    )]
-
-                    val interpolatorResId =
-                        ta.getResourceId(R.styleable.SlidingUpPanelLayout_umanoScrollInterpolator, -1)
-                    if (interpolatorResId != -1) {
-                        scrollerInterpolator = AnimationUtils.loadInterpolator(context, interpolatorResId)
-                    }
-                    ta.recycle()
+                val interpolatorResId =
+                    ta.getResourceId(R.styleable.SlidingUpPanelLayout_umanoScrollInterpolator, -1)
+                if (interpolatorResId != -1) {
+                    scrollerInterpolator = AnimationUtils.loadInterpolator(context, interpolatorResId)
                 }
+                ta.recycle()
             }
 
             val density = context.resources.displayMetrics.density

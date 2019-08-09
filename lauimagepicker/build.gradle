@@ -33,11 +33,10 @@ repositories {
 
 dependencies {
     implementation kotlin_compile_path
+    implementation cfuture_compile_path
 
-    implementation "com.android.support:appcompat-v7:$android_support_version"
-    implementation "com.android.support:exifinterface:$android_support_version"
-
-    implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0' // TODO REMOVE
+    implementation "androidx.appcompat:appcompat:$androidx_version"
+    implementation "androidx.exifinterface:exifinterface:1.0.0" // TODO FIX DEPENDENCY
 
     implementation project(':ljubase')
 }

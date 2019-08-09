@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ltei.ljubase.interfaces.ObjectBinder
+import com.ltei.ljubase.interfaces.IObjectBinder
 
-abstract class ListRecyclerViewV2<T> : RecyclerView, ObjectBinder<MutableList<T>> {
+abstract class ListRecyclerViewV2<T> : RecyclerView, IObjectBinder<MutableList<T>> {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -63,7 +63,6 @@ abstract class ListRecyclerViewV2<T> : RecyclerView, ObjectBinder<MutableList<T>
         override fun getItemCount() = dataset.size
 
     }
-
 
 
 }

@@ -31,6 +31,6 @@ repositories {
 dependencies {
     implementation kotlin_compile_path
 
-    implementation "com.android.support:support-annotations:$android_support_version"
-    implementation "com.android.support:appcompat-v7:$android_support_version"
+    implementation "androidx.appcompat:appcompat:$androidx_version"
+    implementation "androidx.annotation:annotation:$androidx_version"
 }

@@ -31,10 +31,9 @@ repositories {
 
 dependencies {
     implementation kotlin_compile_path
+    implementation cfuture_compile_path
 
-    implementation "com.android.support:appcompat-v7:$android_support_version"
-
-    implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0' // TODO REMOVE
+    implementation "androidx.appcompat:appcompat:$androidx_version"
 
     implementation project(':ljubase')
 }

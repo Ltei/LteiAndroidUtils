@@ -29,14 +29,10 @@ repositories {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    implementation kotlin_compile_path // "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    
-    implementation "com.android.support:appcompat-v7:$android_support_version"
-    implementation "com.android.support:customtabs:$android_support_version" // solve conflict
-    implementation "com.android.support:support-media-compat:$android_support_version" // solve conflict
-    implementation "com.android.support:support-v4:$android_support_version" // solve conflict
-    implementation "com.android.support:support-annotations:$android_support_version"
+    implementation kotlin_compile_path
+
+    implementation "androidx.appcompat:appcompat:$androidx_version"
+    implementation "androidx.annotation:annotation:$androidx_version"
     
     implementation "com.google.android.gms:play-services-ads:$play_services_version"
 

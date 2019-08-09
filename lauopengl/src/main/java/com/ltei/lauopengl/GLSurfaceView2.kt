@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.PixelFormat
 import android.opengl.GLES20
 import android.util.AttributeSet
-import com.ltei.ljubase.LLog
+import com.ltei.ljubase.Logger
 import java.nio.FloatBuffer
 import java.nio.ShortBuffer
 import javax.microedition.khronos.egl.EGLConfig
@@ -12,6 +12,8 @@ import javax.microedition.khronos.opengles.GL10
 
 
 open class GLSurfaceView2 : android.opengl.GLSurfaceView, android.opengl.GLSurfaceView.Renderer {
+
+    private val logger = Logger(GLSurfaceView2::class.java)
 
     private var drawableProvider: DrawableProvider? = null
     private var backgroundColor: GLColor? = null
@@ -71,7 +73,7 @@ open class GLSurfaceView2 : android.opengl.GLSurfaceView, android.opengl.GLSurfa
     }
 
     override fun onDrawFrame(_unused: GL10) {
-        LLog.debug(javaClass, "Rendering")
+        logger.debug("Rendering")
 
         GLUtils.checkGlError {
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
@@ -90,26 +92,26 @@ open class GLSurfaceView2 : android.opengl.GLSurfaceView, android.opengl.GLSurfa
 
         drawableProvider?.get()?.forEach { drawable ->
             GLES20.glVertexAttribPointer(
-                positionHandle,
-                VALUES_PER_VERTEX_POSITION,
-                GLES20.GL_FLOAT,
-                false,
-                4 * VALUES_PER_VERTEX_POSITION,
-                drawable.positionVertices
+                    positionHandle,
+                    VALUES_PER_VERTEX_POSITION,
+                    GLES20.GL_FLOAT,
+                    false,
+                    4 * VALUES_PER_VERTEX_POSITION,
+                    drawable.positionVertices
             )
             GLES20.glVertexAttribPointer(
-                colorHandle,
-                VALUES_PER_VERTEX_COLOR,
-                GLES20.GL_FLOAT,
-                false,
-                4 * VALUES_PER_VERTEX_COLOR,
-                drawable.colorVertices
+                    colorHandle,
+                    VALUES_PER_VERTEX_COLOR,
+                    GLES20.GL_FLOAT,
+                    false,
+                    4 * VALUES_PER_VERTEX_COLOR,
+                    drawable.colorVertices
             )
             GLES20.glDrawElements(
-                GLES20.GL_TRIANGLES,
-                drawable.drawIndexCount,
-                GLES20.GL_UNSIGNED_SHORT,
-                drawable.drawIndices
+                    GLES20.GL_TRIANGLES,
+                    drawable.drawIndexCount,
+                    GLES20.GL_UNSIGNED_SHORT,
+                    drawable.drawIndices
             )
         }
         GLUtils.checkGlError()
@@ -121,7 +123,7 @@ open class GLSurfaceView2 : android.opengl.GLSurfaceView, android.opengl.GLSurfa
 
         // todo
         Thread.sleep(500)
-        LLog.debug(javaClass, "Requesting render")
+        logger.debug("Requesting render")
         requestRender()
     }
 

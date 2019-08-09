@@ -645,13 +645,13 @@ open class ViewDragHelper private constructor(
         if (mInitialMotionX == null) {
             return
         }
-        Arrays.fill(mInitialMotionX, 0f)
-        Arrays.fill(mInitialMotionY, 0f)
-        Arrays.fill(mLastMotionX, 0f)
-        Arrays.fill(mLastMotionY, 0f)
-        Arrays.fill(mInitialEdgesTouched, 0)
-        Arrays.fill(mEdgeDragsInProgress, 0)
-        Arrays.fill(mEdgeDragsLocked, 0)
+        Arrays.fill(mInitialMotionX!!, 0f)
+        Arrays.fill(mInitialMotionY!!, 0f)
+        Arrays.fill(mLastMotionX!!, 0f)
+        Arrays.fill(mLastMotionY!!, 0f)
+        Arrays.fill(mInitialEdgesTouched!!, 0)
+        Arrays.fill(mEdgeDragsInProgress!!, 0)
+        Arrays.fill(mEdgeDragsLocked!!, 0)
         mPointersDown = 0
     }
 
