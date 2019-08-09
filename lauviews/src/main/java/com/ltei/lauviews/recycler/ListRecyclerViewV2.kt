@@ -2,19 +2,28 @@ package com.ltei.lauviews.recycler
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+<<<<<<< Updated upstream
 import com.ltei.ljubase.interfaces.IObjectBinder
 
 abstract class ListRecyclerViewV2<T> : RecyclerView, IObjectBinder<MutableList<T>> {
+=======
+import com.ltei.lauviews.IObjectViewBinder
+import com.ltei.ljubase.interfaces.IObjectBinder
+
+abstract class  ListRecyclerViewV2<T> : RecyclerView, IObjectViewBinder<MutableList<T>> {
+>>>>>>> Stashed changes
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
 
     val listAdapter = Adapter()
+    override val objectView: View get() = this
     override val boundObject: MutableList<T>? get() = listAdapter.dataset
 
     init {

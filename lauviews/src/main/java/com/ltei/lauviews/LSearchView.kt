@@ -15,7 +15,7 @@ import android.widget.RelativeLayout
 import com.ltei.lauutils.LUnits
 import com.ltei.lauutils.LViews
 
-class LSearchView : RelativeLayout {
+open class LSearchView : RelativeLayout {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)

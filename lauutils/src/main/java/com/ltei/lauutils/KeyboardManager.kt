@@ -4,18 +4,19 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 
 
-class KeyboardManager constructor(private val act: Activity) : ViewTreeObserver.OnGlobalLayoutListener {
+class KeyboardManager constructor(
+    private val activity: Activity
+) : ViewTreeObserver.OnGlobalLayoutListener {
 
     companion object {
         private const val MAGIC_NUMBER = 200
     }
 
-    private val mRootView: View = (act.findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0)
+    private val rootView: View = activity.window.decorView.rootView
     private var mIsKeyboardVisible: Boolean? = null
     val isKeyboardVisible: Boolean get() = mIsKeyboardVisible!!
     private val mScreenDensity: Float
@@ -24,15 +25,15 @@ class KeyboardManager constructor(private val act: Activity) : ViewTreeObserver.
 
 
     init {
-        mRootView.viewTreeObserver.addOnGlobalLayoutListener(this)
-        mScreenDensity = act.resources.displayMetrics.density
+        rootView.viewTreeObserver.addOnGlobalLayoutListener(this)
+        mScreenDensity = activity.resources.displayMetrics.density
     }
 
     override fun onGlobalLayout() {
         val r = Rect()
-        mRootView.getWindowVisibleDisplayFrame(r)
+        rootView.getWindowVisibleDisplayFrame(r)
 
-        val heightDiff = mRootView.rootView.height - (r.bottom - r.top)
+        val heightDiff = rootView.rootView.height - (r.bottom - r.top)
         val dp = heightDiff / mScreenDensity
         val isVisible = dp > MAGIC_NUMBER
 
@@ -73,16 +74,19 @@ class KeyboardManager constructor(private val act: Activity) : ViewTreeObserver.
      * @param context calling context
      */
     fun toggleKeyboardVisibility(context: Context) {
-        (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)?.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+        (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)?.toggleSoftInput(
+            InputMethodManager.SHOW_FORCED,
+            0
+        )
     }
 
     /**
      * Force closes the soft keyboard
      */
     fun forceCloseKeyboard() {
-        if (act.currentFocus != null) {
-            act.window.currentFocus?.windowToken?.let { windowToken ->
-                val inputMethodManager = act.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (activity.currentFocus != null) {
+            activity.window.currentFocus?.windowToken?.let { windowToken ->
+                val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
             }
         }

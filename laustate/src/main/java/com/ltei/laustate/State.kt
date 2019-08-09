@@ -11,6 +11,13 @@ abstract class State(
     val outAnimationId: Int = android.R.anim.fade_out
 ) : Fragment() {
 
+    internal var mStateManager: StateManager? = null
+        set(value) {
+            if (field != null) throw IllegalStateException()
+            field = value
+        }
+    val stateManager get() = mStateManager!!
+
     private val logger = Logger(State::class.java)
     var stateView: View? = null
 
@@ -22,6 +29,7 @@ abstract class State(
 
     override fun onResume() {
         logger.debug()
+        stateManager.onStateOnResumeListeners.forEach { it.invoke(this) }
         super.onResume()
     }
 

@@ -18,12 +18,15 @@ class StateManager(
     private val logger = Logger(this)
     private var mBackstack = ArrayList<State>()
 
+    val onStateOnResumeListeners = mutableListOf<(State) -> Unit>()
+
     val backstack: List<State> get() = mBackstack
     val currentState: State get() = mBackstack.last()
     val isRootStateOnTop: Boolean get() = mBackstack.size == 1
 
 
     fun setState(state: State) {
+        state.mStateManager = this
         if (mBackstack.size == 0) {
             parent.supportFragmentManager.beginTransaction()
                 .replace(stateLayoutId, state)
@@ -70,13 +73,13 @@ class StateManager(
         }
     }
 
-    inline fun <reified T : State> applyToStates(block: (T) -> Unit) {
-        for (state in backstack) {
-            if (state is T) {
-                block(state)
-            }
-        }
-    }
+//    inline fun <reified T : State> applyToStates(block: (T) -> Unit) {
+//        for (state in backstack) {
+//            if (state is T) {
+//                block(state)
+//            }
+//        }
+//    }
 
     /**
      * Call it from parent activity
