@@ -7,16 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-<<<<<<< Updated upstream
-import com.ltei.ljubase.interfaces.IObjectBinder
-
-abstract class ListRecyclerViewV2<T> : RecyclerView, IObjectBinder<MutableList<T>> {
-=======
 import com.ltei.lauviews.IObjectViewBinder
-import com.ltei.ljubase.interfaces.IObjectBinder
 
-abstract class  ListRecyclerViewV2<T> : RecyclerView, IObjectViewBinder<MutableList<T>> {
->>>>>>> Stashed changes
+abstract class ListRecyclerViewV2<T> : RecyclerView, IObjectViewBinder<MutableList<T>> {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
