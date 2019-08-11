@@ -13,7 +13,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.ltei.lauutils.LUnits
-import com.ltei.lauutils.LViews
 
 open class LSearchView : RelativeLayout {
 
@@ -59,7 +58,7 @@ open class LSearchView : RelativeLayout {
         leftIcon.setImageResource(android.R.drawable.ic_menu_search)
         leftIcon.setColorFilter(Color.argb(10, 255, 255, 255))
         leftIcon.layoutParams = leftIconParams
-        LViews.setVisibility(leftIcon, View.GONE)
+        leftIcon.visibility = View.GONE
         addView(leftIcon)
 
         val searchEditTextParams = RelativeLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
@@ -67,7 +66,7 @@ open class LSearchView : RelativeLayout {
         searchEditTextParams.addRule(CENTER_VERTICAL)
         txtedSearch.layoutParams = searchEditTextParams
         txtedSearch.addTextChangedListener(MEditTextWatcher())
-        LViews.setVisibility(txtedSearch, View.GONE)
+        txtedSearch.visibility = View.GONE
         addView(txtedSearch)
 
         val rightIconParams = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
@@ -87,16 +86,16 @@ open class LSearchView : RelativeLayout {
 
     fun expandSearchView() {
         rightIcon.setImageResource(closeIconId)
-        LViews.setVisibility(leftIcon, View.VISIBLE)
-        LViews.setVisibility(txtedSearch, View.VISIBLE)
+        leftIcon.visibility = View.VISIBLE
+        txtedSearch.visibility = View.VISIBLE
         onSearchViewOpened?.invoke()
         isExpanded = true
     }
 
     fun collapseSearchView() {
         rightIcon.setImageResource(searchIconId)
-        LViews.setVisibility(leftIcon, View.GONE)
-        LViews.setVisibility(txtedSearch, View.GONE)
+        leftIcon.visibility = View.GONE
+        txtedSearch.visibility = View.GONE
         onSearchViewClosed?.invoke()
         isExpanded = false
     }

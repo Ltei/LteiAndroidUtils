@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
-import com.ltei.lauutils.LViews
 
 class LProgressBar : LinearLayout {
 
@@ -73,13 +72,13 @@ class LProgressBar : LinearLayout {
 
     private fun update() {
         if (mMaxProgress <= 0f || mProgress > mMaxProgress) {
-            LViews.setVisibility(viewLeft, View.GONE)
-            LViews.setVisibility(viewRight, View.GONE)
-            LViews.setVisibility(viewZero, View.VISIBLE)
+            viewLeft.visibility = View.GONE
+            viewRight.visibility = View.GONE
+            viewZero.visibility = View.VISIBLE
         } else { // TODO
-            LViews.setVisibility(viewLeft, View.VISIBLE)
-            LViews.setVisibility(viewRight, View.VISIBLE)
-            LViews.setVisibility(viewZero, View.GONE)
+            viewLeft.visibility = View.VISIBLE
+            viewRight.visibility = View.VISIBLE
+            viewZero.visibility = View.GONE
             viewLeft.layoutParams = getParams(mProgress)
             viewRight.layoutParams = getParams(mMaxProgress - mProgress)
         }

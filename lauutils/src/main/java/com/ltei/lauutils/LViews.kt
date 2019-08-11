@@ -62,38 +62,15 @@ object LViews {
         }
     }
 
-    fun setVisibility(view: View, visibility: Int) {
-        if (view.visibility != visibility) {
-            view.visibility = visibility
-        }
-    }
 
-    fun setVisible(view: View) {
-        setVisibility(view, View.VISIBLE)
+    fun View.setDimensions(width: Int, height: Int) {
+        layoutParams = ViewGroup.LayoutParams(width, height)
     }
-
-    fun setGone(view: View) {
-        setVisibility(view, View.GONE)
-    }
-
-    fun setPaddingStart(view: View, padding: Int) {
-        view.setPadding(padding, view.paddingTop, view.paddingRight, view.paddingBottom)
-    }
-
-    fun setPaddingBottom(view: View, padding: Int) {
-        view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, padding)
-    }
-
-    fun setPaddingVertical(view: View, padding: Int) {
-        view.setPadding(view.paddingLeft, padding, view.paddingRight, padding)
-    }
-
-    fun setPaddingHorizontal(view: View, padding: Int) {
-        view.setPadding(padding, view.paddingTop, padding, view.paddingBottom)
-    }
-
-    fun setPadding(view: View, padding: Int) {
-        view.setPadding(padding, padding, padding, padding)
-    }
+    fun View.setPaddingStart(padding: Int) = setPadding(padding, paddingTop, paddingRight, paddingBottom)
+    fun View.setPaddingBottom(padding: Int) = setPadding(paddingLeft, paddingTop, paddingRight, padding)
+    fun View.setPaddingTop(padding: Int) = setPadding(paddingLeft, padding, paddingRight, paddingBottom)
+    fun View.setPaddingVertical(padding: Int) = setPadding(paddingLeft, padding, paddingRight, padding)
+    fun View.setPaddingHorizontal(padding: Int) = setPadding(padding, paddingTop, padding, paddingBottom)
+    fun View.setPadding(padding: Int) = setPadding(padding, padding, padding, padding)
 
 }
