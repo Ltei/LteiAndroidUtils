@@ -2,10 +2,18 @@
 /*
 
 # Un-ignore all of subtree
-!/lau*/src/main/java
-!/lau*/src/main/AndroidManifest.xml
+
+!build.gradle
+!settings.gradle
+!gradle.properties
+!.gitignore
+
+!/lau*
+/lau*/*
+!/lau*/src/
+/lau*/src/*
 !/lau*/src/build.gradle
-!/build.gradle
-!/settings.gradle
-!/gradle.properties
-!/.gitignore
+!/lau*/src/main/
+/lau*/src/main/*
+!/lau*/src/main/AndroidManifest.xml
+!/lau*/src/main/java/
