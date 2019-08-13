@@ -1,10 +1,11 @@
-*.iml
-*/*.iml
-*/build/*
+# Ignore everything in the root
+/*
 
-.gradle/
-.idea/
-
-gradle/
-gradlew
-gradlew.bat
+# Un-ignore all of subtree
+!/lau*/src/main/java
+!/lau*/src/main/AndroidManifest.xml
+!/lau*/src/build.gradle
+!/build.gradle
+!/settings.gradle
+!/gradle.properties
+!/.gitignore

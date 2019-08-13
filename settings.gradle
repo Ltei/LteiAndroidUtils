@@ -2,7 +2,7 @@ rootProject.name = 'lteiandroidutils'
 
 def includeLjuProject(String name) {
     include(':' + name)
-    project(':' + name).projectDir = new File("C:\\Users\\A754885\\Home\\IntercoWorkspace\\LteiUtils\\LteiJavaUtils\\" + name)
+    project(':' + name).projectDir = new File("C:\\Home\\Workspaces\\LteiUtils\\LteiJavaUtils\\" + name)
 }
 
 include(':lauadmob')
