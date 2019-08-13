@@ -2,6 +2,7 @@ package com.ltei.lausave
 
 import android.content.SharedPreferences
 
+@Deprecated("lausave will be removed")
 object LPreferences {
     fun <T : Savable> putNullable(id: String, prefs: SharedPreferences.Editor, value: T?) {
         prefs.putBoolean("${id}_isNull", value == null)

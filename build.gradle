@@ -3,14 +3,11 @@
 buildscript {
     ext.compile_sdk_version = 29
     ext.androidx_version = '1.0.2'
-    ext.play_services_version = '17.0.0'
 
     ext.kotlin_version = '1.3.31'
     ext.kotlin_compile_path = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    ext.gson_version = '2.8.5'
-    ext.gson_compile_path = "com.google.code.gson:gson:$gson_version"
-
+    ext.gson_compile_path = "com.google.code.gson:gson:2.8.5"
     ext.cfuture_compile_path = 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
     ext.okhttp_compile_path = 'com.squareup.okhttp3:okhttp:4.0.1'
 

@@ -30,8 +30,5 @@ dependencies {
 
     implementation "androidx.appcompat:appcompat:$androidx_version"
 
-//    implementation "com.android.support:support-v4:$android_support_version"
-//    implementation "com.android.support:support-media-compat:$android_support_version"
-
-    implementation "com.google.android.gms:play-services-maps:$play_services_version"
+    implementation "com.google.android.gms:play-services-maps:17.0.0"
 }

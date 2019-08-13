@@ -2,11 +2,10 @@ package com.ltei.lauadmob
 
 import android.Manifest
 import android.app.Activity
-import android.support.annotation.RequiresPermission
+import androidx.annotation.RequiresPermission
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
-import com.ltei.ljuutils.collections.SimpleQueue
 
 class InterstitialAdManager @RequiresPermission(Manifest.permission.INTERNET) constructor(activity: Activity, adUnitId: String) {
 
