@@ -1,55 +1,53 @@
 package com.ltei.lauutils
 
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
-import java8.util.concurrent.CompletableFuture
 
 class PermissionsManager(
-        private val activity: Activity,
-        initialRequestCode: Int
+    private val activity: Activity,
+    initialRequestCode: Int
 ) {
-
-    private class AwaitingPermissions(
-            val permissions: Array<String>,
-            val future: CompletableFuture<Array<String>>
-    )
 
     private val mAwaitingPermissions = mutableMapOf<Int, AwaitingPermissions>()
     private var mNextRequestCode = initialRequestCode
 
-    fun assertPermission(permission: String): CompletableFuture<Array<String>> {
-        return assertPermissions(arrayOf(permission))
+    fun assertPermission(permission: String, callback: (Boolean) -> Unit) {
+        return assertPermissions(arrayOf(permission), callback)
     }
 
-    fun assertPermissions(permissions: Array<String>): CompletableFuture<Array<String>> {
-        if (areGranted(*permissions)) {
-            return CompletableFuture.completedFuture(permissions)
-        }
-        val future = CompletableFuture<Array<String>>()
-        val awaiting = AwaitingPermissions(permissions, future)
+    fun assertPermissions(permissions: Array<String>, callback: (Boolean) -> Unit) {
+        if (areGranted(*permissions)) callback.invoke(true)
+
+        val awaiting = AwaitingPermissions(permissions, callback)
         mAwaitingPermissions[mNextRequestCode] = awaiting
         ActivityCompat.requestPermissions(activity, permissions, mNextRequestCode)
         mNextRequestCode += 1
-        return future
     }
 
     fun onRequestPermissionsResult(requestCode: Int): Boolean {
-        val awaiting = mAwaitingPermissions[requestCode]
+        val awaiting = mAwaitingPermissions.remove(requestCode)
         return if (awaiting != null) {
-            if (areGranted(*awaiting.permissions)) {
-                awaiting.future.complete(awaiting.permissions)
-            } else {
-                awaiting.future.completeExceptionally(Exception())
-            }
+            awaiting.callback.invoke(areGranted(*awaiting.permissions))
             true
         } else {
             false
         }
     }
 
-    fun areGranted(vararg permissions: String): Boolean = permissions.all {
-        ActivityCompat.checkSelfPermission(activity, it) == PackageManager.PERMISSION_GRANTED
+    fun areGranted(vararg permissions: String) = areGranted(activity, *permissions)
+
+    companion object {
+        fun areGranted(context: Context, vararg permissions: String): Boolean = permissions.all {
+            ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+        }
+
+        fun areGranted(context: Context, permissions: List<String>): Boolean = permissions.all {
+            ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+        }
     }
+
+    private class AwaitingPermissions(val permissions: Array<String>, val callback: (Boolean) -> Unit)
 
 }

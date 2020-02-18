@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.Nullable
 import com.ltei.lauutils.LUnits
+import com.ltei.lauviews.interfaces.IObjectViewBinder
 
 open class ListLinearLayout : LinearLayout {
 
@@ -112,6 +113,16 @@ open class ListLinearLayout : LinearLayout {
         this.separatorAtEnd = separatorAtEnd
         this.viewCreator = viewCreator
         setObservedList(list)
+    }
+
+    fun <T> setViewCreator(creator: (Context) -> IObjectViewBinder<T>) {
+        this.viewCreator = object : ViewCreator {
+            override fun createView(item: Any, itemPosition: Int): View {
+                val view = creator(context)
+                view.bind(item as T)
+                return view.objectView
+            }
+        }
     }
 
     fun setDefaultViewCreator(

@@ -7,11 +7,9 @@ import android.content.Context.CLIPBOARD_SERVICE
 
 
 object LClipboard {
-
     fun copy(context: Context, text: String) {
         val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
         val clip = ClipData.newPlainText("label", text)
-        clipboard!!.setPrimaryClip(clip)
+        clipboard!!.primaryClip = clip
     }
-
 }

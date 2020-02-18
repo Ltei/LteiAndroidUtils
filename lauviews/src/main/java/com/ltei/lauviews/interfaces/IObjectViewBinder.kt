@@ -1,4 +1,4 @@
-package com.ltei.lauviews
+package com.ltei.lauviews.interfaces
 
 import android.view.View
 import com.ltei.lauviews.recycler.ObjectViewHolder

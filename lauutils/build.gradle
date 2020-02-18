@@ -2,15 +2,15 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion compile_sdk_version
+    compileSdkVersion versions.compile_sdk
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion compile_sdk_version
+        minSdkVersion versions.min_sdk
+        targetSdkVersion versions.compile_sdk
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "android.support._test.runner.AndroidJUnitRunner"
 
     }
 
@@ -30,10 +30,9 @@ repositories {
 }
 
 dependencies {
-    implementation kotlin_compile_path
-    implementation cfuture_compile_path
-
-    implementation "androidx.appcompat:appcompat:$androidx_version"
+    implementation deps.kotlin
+    implementation deps.androidx_appcompat
+    implementation deps.androidx_recyclerview
 
     implementation project(':ljubase')
 }

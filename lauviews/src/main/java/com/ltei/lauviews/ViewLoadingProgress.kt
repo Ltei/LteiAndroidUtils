@@ -10,8 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class ViewLoadingProgress : ProgressBar, ILoadListener {
 
-    private val logger = Logger(this)
-
     private val loadingCount = AtomicInteger(0)
 
     constructor(context: Context) : super(context)
@@ -45,6 +43,10 @@ class ViewLoadingProgress : ProgressBar, ILoadListener {
         } else if (count < 0) {
             throw IllegalStateException()
         }
+    }
+
+    companion object {
+        private val logger = Logger(ViewLoadingProgress::class.java)
     }
 
 }

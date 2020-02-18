@@ -1,7 +1,9 @@
 package com.ltei.laustate
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import com.ltei.ljubase.Logger
@@ -18,8 +20,14 @@ abstract class State(
         }
     val stateManager get() = mStateManager!!
 
-    private val logger = Logger(State::class.java)
+    private val logger = Logger(State::class.java, name = javaClass.simpleName)
     var stateView: View? = null
+
+    abstract override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View?
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         logger.debug()
@@ -43,7 +51,6 @@ abstract class State(
         return false
     }
 
-    /** Used by StateManager, for backstack management */
-    abstract fun shouldRemoveFromBackstack(newState: State): Boolean
+    open fun shouldRemoveFromBackstack(newState: State): Boolean = true
 
 }

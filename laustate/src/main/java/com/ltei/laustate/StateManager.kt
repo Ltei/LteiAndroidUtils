@@ -15,7 +15,6 @@ class StateManager(
     private val stateLayoutId: Int
 ) {
 
-    private val logger = Logger(this)
     private var mBackstack = ArrayList<State>()
 
     val onStateOnResumeListeners = mutableListOf<(State) -> Unit>()
@@ -24,6 +23,13 @@ class StateManager(
     val currentState: State get() = mBackstack.last()
     val isRootStateOnTop: Boolean get() = mBackstack.size == 1
 
+
+    fun onRecreateActivity() {
+        parent.supportFragmentManager.beginTransaction()
+            .replace(stateLayoutId, currentState)
+            .addToBackStack(null)
+            .commit()
+    }
 
     fun setState(state: State) {
         state.mStateManager = this
@@ -73,20 +79,13 @@ class StateManager(
         }
     }
 
-//    inline fun <reified T : State> applyToStates(block: (T) -> Unit) {
-//        for (state in backstack) {
-//            if (state is T) {
-//                block(state)
-//            }
-//        }
-//    }
-
     /**
      * Call it from parent activity
      */
-    fun onBackPressed() {
-        if (!currentState.onBackPressed())
-            popState()
+    fun onBackPressed(): Boolean {
+        if (currentState.onBackPressed()) return true
+        if (popState()) return true
+        return false
     }
 
     private fun tryStartChangeAnimation(onAnimationEnd: () -> Unit) {
@@ -98,6 +97,10 @@ class StateManager(
         val animation = AnimationUtils.loadAnimation(parent.applicationContext, currentState.outAnimationId)
         LAnimations.setListeners(animation, onEnd = onAnimationEnd)
         currentStateView.startAnimation(animation)
+    }
+
+    companion object {
+        private val logger = Logger(StateManager::class.java)
     }
 
 }

@@ -18,14 +18,13 @@ object LApp {
     }
 
     fun getName(context: Context): String {
-        val lPackageManager = context.packageManager
-        var lApplicationInfo: ApplicationInfo? = null
-        try {
-            lApplicationInfo = lPackageManager.getApplicationInfo(context.applicationInfo.packageName, 0)
+        val packageManager = context.packageManager
+        val applicationInfo = try {
+            packageManager.getApplicationInfo(context.applicationInfo.packageName, 0)
         } catch (e: PackageManager.NameNotFoundException) {
-        }
-
-        return (if (lApplicationInfo != null) lPackageManager.getApplicationLabel(lApplicationInfo) else "Unknown") as String
+            null
+        } ?: return "Unknown"
+        return packageManager.getApplicationLabel(applicationInfo) as String
     }
 
     fun getPackageName(context: Context): String {

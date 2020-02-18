@@ -2,19 +2,26 @@ package com.ltei.lauviews.recycler
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ltei.lauviews.interfaces.IObjectViewBinder
 
-open class ListRecyclerView : RecyclerView {
+abstract class ListRecyclerView<T> : RecyclerView, IObjectViewBinder<MutableList<T>> {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
 
+    val listAdapter = Adapter()
+    override val objectView: View get() = this
+    override val boundObject: MutableList<T>? get() = listAdapter.dataset
+
     init {
         layoutManager = LinearLayoutManager(context)
+        adapter = listAdapter
     }
 
     private var currentDivider: DividerItemDecoration? = null
@@ -34,48 +41,30 @@ open class ListRecyclerView : RecyclerView {
         }
     }
 
-    class Adapter<T>(
-        dataset: List<T>,
-        private val viewHolderCreator: (parent: ViewGroup, type: Int) -> ObjectViewHolder<T>
-    ) : RecyclerView.Adapter<ObjectViewHolder<T>>() {
-
-        var dataset: List<T> = dataset
-            private set
-
-        constructor(viewHolderCreator: (parent: ViewGroup, type: Int) -> ObjectViewHolder<T>) :
-                this(listOf(), viewHolderCreator)
-
-        fun changeDataset(dataset: List<T>, notify: Boolean = true) {
-            this.dataset = dataset
-            if (notify) notifyDataSetChanged()
-        }
-
-        override fun onCreateViewHolder(p0: ViewGroup, p1: Int) = viewHolderCreator.invoke(p0, p1)
-        override fun onBindViewHolder(holder: ObjectViewHolder<T>, position: Int) = holder.bind(dataset[position])
-        override fun getItemCount() = dataset.size
-
+    override fun bind(obj: MutableList<T>) {
+        listAdapter.changeDataset(obj)
     }
 
-    class MutableAdapter<T>(
-        dataset: MutableList<T>,
-        private val viewHolderCreator: (parent: ViewGroup, type: Int) -> ObjectViewHolder<T>
-    ) : RecyclerView.Adapter<ObjectViewHolder<T>>() {
+    protected abstract fun createViewHolder(parent: ViewGroup, viewType: Int): ObjectViewHolder<T>
 
-        var dataset: MutableList<T> = dataset
+    inner class Adapter : RecyclerView.Adapter<ObjectViewHolder<T>>() {
+
+        var dataset: MutableList<T> = mutableListOf()
             private set
-
-        constructor(viewHolderCreator: (parent: ViewGroup, type: Int) -> ObjectViewHolder<T>) :
-                this(mutableListOf(), viewHolderCreator)
 
         fun changeDataset(dataset: MutableList<T>, notify: Boolean = true) {
             this.dataset = dataset
             if (notify) notifyDataSetChanged()
         }
 
-        override fun onCreateViewHolder(p0: ViewGroup, p1: Int) = viewHolderCreator.invoke(p0, p1)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ObjectViewHolder<T> {
+            return this@ListRecyclerView.createViewHolder(parent, viewType)
+        }
+
         override fun onBindViewHolder(holder: ObjectViewHolder<T>, position: Int) = holder.bind(dataset[position])
         override fun getItemCount() = dataset.size
 
     }
+
 
 }

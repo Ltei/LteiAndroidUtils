@@ -25,10 +25,9 @@ import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.roundToInt
 
 @Suppress("DEPRECATION")
-class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
-    ViewGroup(context, attrs, defStyle) {
-
-    private val logger = Logger(this)
+class VerticalDrawer
+@JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : ViewGroup(context, attrs, defStyle) {
 
     private var mMinFlingVelocity = DEFAULT_MIN_FLING_VELOCITY // Minimum velocity that will be detected as a fling
     private var mCoveredFadeColor =
@@ -1251,6 +1250,8 @@ class VerticalDrawer @JvmOverloads constructor(context: Context, attrs: Attribut
     // Companion
 
     companion object {
+        private val logger = Logger(VerticalDrawer::class.java)
+
         private const val DEFAULT_PANEL_HEIGHT = 68 // Default peeking out panel height // dp;
         private const val DEFAULT_ANCHOR_POINT = 1.0f // Default anchor point height // In relative %
         private val DEFAULT_SLIDE_STATE = PanelState.COLLAPSED // Default initial state for the component

@@ -1,7 +1,8 @@
-package com.ltei.lauutils
+package com.ltei.lauutils._deprecated
 
 import android.view.View
 
+@Deprecated("Has been integrated into std")
 object LFocus {
 
     fun clear(view: View) {

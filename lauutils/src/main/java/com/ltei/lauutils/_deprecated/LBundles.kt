@@ -1,8 +1,9 @@
-package com.ltei.lauutils
+package com.ltei.lauutils._deprecated
 
 import android.os.Bundle
 import java.io.Serializable
 
+@Deprecated("Useless")
 object LBundles {
 
     fun int(id: String, value: Int): Bundle {
@@ -18,7 +19,10 @@ object LBundles {
     }
 
     fun serializableList(id: String, value: List<Serializable>): Bundle {
-        return serializable(id, SerializableList(value))
+        return serializable(
+            id,
+            SerializableList(value)
+        )
     }
 
     private class SerializableList(list: List<Serializable>) : ArrayList<Serializable>(list), Serializable

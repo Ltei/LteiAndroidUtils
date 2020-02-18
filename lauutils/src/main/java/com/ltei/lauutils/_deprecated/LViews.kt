@@ -1,4 +1,4 @@
-package com.ltei.lauutils
+package com.ltei.lauutils._deprecated
 
 import android.view.View
 import android.view.ViewGroup
@@ -6,6 +6,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 
+@Deprecated("Use ViewUtils methods instead")
 object LViews {
 
     fun setup(view: View, width: Int = MATCH_PARENT, height: Int = WRAP_CONTENT) {
@@ -13,7 +14,15 @@ object LViews {
     }
 
     fun setup(view: View, width: Int = MATCH_PARENT, height: Int = WRAP_CONTENT, margins: Int = 0) {
-        setup(view, width, height, margins, margins, margins, margins)
+        setup(
+            view,
+            width,
+            height,
+            margins,
+            margins,
+            margins,
+            margins
+        )
     }
 
     fun setup(

@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.ltei.lauutils.LUnits
+import com.ltei.ljubase.CompilationWarnings.UNUSED_PARAMETER
 
 open class LSearchView : RelativeLayout {
 
@@ -51,7 +52,7 @@ open class LSearchView : RelativeLayout {
 
         val margin = LUnits.dpToPx(resources, 12)
 
-        val leftIconParams = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+        val leftIconParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
         leftIconParams.setMargins(0, margin, margin, margin)
         leftIconParams.addRule(ALIGN_PARENT_START)
         leftIconParams.addRule(CENTER_VERTICAL)
@@ -59,22 +60,28 @@ open class LSearchView : RelativeLayout {
         leftIcon.setColorFilter(Color.argb(10, 255, 255, 255))
         leftIcon.layoutParams = leftIconParams
         leftIcon.visibility = View.GONE
+
+        @Suppress("LeakingThis")
         addView(leftIcon)
 
-        val searchEditTextParams = RelativeLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+        val searchEditTextParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
         searchEditTextParams.addRule(END_OF, leftIcon.id)
         searchEditTextParams.addRule(CENTER_VERTICAL)
         txtedSearch.layoutParams = searchEditTextParams
         txtedSearch.addTextChangedListener(MEditTextWatcher())
         txtedSearch.visibility = View.GONE
+
+        @Suppress("LeakingThis")
         addView(txtedSearch)
 
-        val rightIconParams = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+        val rightIconParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
         rightIconParams.addRule(ALIGN_PARENT_END)
         rightIconParams.addRule(CENTER_VERTICAL)
         rightIcon.setImageResource(searchIconId)
         rightIcon.layoutParams = rightIconParams
         rightIcon.setOnClickListener(::onSearchIconClick)
+
+        @Suppress("LeakingThis")
         addView(rightIcon)
 
         val focusChangeListener = MOnFocusChangeListener()
@@ -82,6 +89,8 @@ open class LSearchView : RelativeLayout {
         leftIcon.onFocusChangeListener = focusChangeListener
         rightIcon.onFocusChangeListener = focusChangeListener
         txtedSearch.onFocusChangeListener = focusChangeListener
+
+        setOnClickListener(::onClick)
     }
 
     fun expandSearchView() {
@@ -100,12 +109,13 @@ open class LSearchView : RelativeLayout {
         isExpanded = false
     }
 
-    private fun onSearchIconClick(@Suppress("UNUSED_PARAMETER") v: View) {
-        if (isExpanded) {
-            collapseSearchView()
-        } else {
-            expandSearchView()
-        }
+    private fun onClick(@Suppress(UNUSED_PARAMETER) v: View) {
+        if (!isExpanded) expandSearchView()
+    }
+
+    private fun onSearchIconClick(@Suppress(UNUSED_PARAMETER) v: View) {
+        if (isExpanded) collapseSearchView()
+        else expandSearchView()
     }
 
     private inner class MOnFocusChangeListener : OnFocusChangeListener {

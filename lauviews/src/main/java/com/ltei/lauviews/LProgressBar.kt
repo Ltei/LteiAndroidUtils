@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
 
-class LProgressBar : LinearLayout {
+open class LProgressBar : LinearLayout {
 
     private var mProgress: Float = 0f
     private var mMaxProgress: Float = 0f
+
+    val progress get() = mProgress
+    val maxProgress get() = mMaxProgress
 
     private val viewLeft: View
     private val viewRight: View
@@ -30,29 +33,21 @@ class LProgressBar : LinearLayout {
         setup()
     }
 
-    fun pgbSetProgress(progress: Float = mProgress, maxProgress: Float = mMaxProgress) {
+    fun updateProgress(progress: Float = mProgress, maxProgress: Float = mMaxProgress) {
         mProgress = progress
         mMaxProgress = maxProgress
         update()
     }
 
-    fun pgbGetProgress(): Float {
-        return mProgress
-    }
-
-    fun pgbGetMaxProgress(): Float {
-        return mMaxProgress
-    }
-
-    fun pgbSetProgressTint(tint: ColorStateList) {
+    fun setProgressTint(tint: ColorStateList) {
         viewLeft.backgroundTintList = tint
     }
 
-    fun pgbSetBackgroundTint(tint: ColorStateList) {
+    fun setProgressBackgroundTint(tint: ColorStateList) {
         viewRight.backgroundTintList = tint
     }
 
-    fun pgbSetZeroTint(tint: ColorStateList) {
+    fun setProgressZeroTint(tint: ColorStateList) {
         viewZero.backgroundTintList = tint
     }
 

@@ -4,10 +4,11 @@ import android.content.Context
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.ltei.lauviews.IObjectViewBinder
-import com.ltei.ljubase.interfaces.IObjectBinder
+import com.ltei.lauviews.interfaces.IObjectViewBinder
 
-abstract class ObjectViewHolder<T>(objectView: View) : RecyclerView.ViewHolder(objectView), IObjectBinder<T> {
+abstract class ObjectViewHolder<T>(objectView: View) : RecyclerView.ViewHolder(objectView), IObjectViewBinder<T> {
+
+    override val objectView: View get() = itemView
 
     abstract class Simple<T>(objectView: View) : ObjectViewHolder<T>(objectView) {
         override val boundObject: T? = null
