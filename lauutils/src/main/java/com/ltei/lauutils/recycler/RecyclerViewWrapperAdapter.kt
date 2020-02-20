@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ltei.ljubase.debug.Logger
 
 open class RecyclerViewWrapperAdapter<T : RecyclerView.ViewHolder>(
     open val wrappedAdapter: RecyclerView.Adapter<T>
@@ -18,32 +19,33 @@ open class RecyclerViewWrapperAdapter<T : RecyclerView.ViewHolder>(
         }
     }
 
-    private class ViewHolderImpl1(itemView: View) : RecyclerView.ViewHolder(itemView)
-    private class ViewHolderImpl2(itemView: View) : RecyclerView.ViewHolder(itemView)
-    private class ViewHolderImpl3(itemView: View) : RecyclerView.ViewHolder(itemView)
-    private class ViewHolderImpl4(itemView: View) : RecyclerView.ViewHolder(itemView)
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if (viewType == VIEW_TYPE_UNKNOWN) return ViewHolderImpl1(View(parent.context))
+        if (viewType == VIEW_TYPE_UNKNOWN) {
+            logger.debug("onCreateViewHolder(viewType=$viewType, Unknown1)")
+            return ViewHolderImpl(View(parent.context))
+        }
 
         if (isWrappedAdapterType(viewType)) {
+            logger.debug("onCreateViewHolder(viewType=$viewType, wrapped)")
             return wrappedAdapter.onCreateViewHolder(parent, viewType)
         }
 
-        val headerIndex = viewType - VIEW_TYPE_HEADER_OR_FOOTER_0
+        val headerIndex = getHeaderIndex(viewType)
         if (headerIndex in headers.indices) {
             val view = headers[headerIndex].invoke(parent.context)
-            return ViewHolderImpl2(view)
+            logger.debug("onCreateViewHolder(viewType=$viewType, header=$headerIndex)")
+            return ViewHolderImpl(view)
         }
 
-        val footerIndex =
-            viewType - VIEW_TYPE_HEADER_OR_FOOTER_0 - headers.size - wrappedAdapter.itemCount
+        val footerIndex = getFooterIndex(viewType, headers.size, wrappedAdapter.itemCount)
         if (footerIndex in footers.indices) {
             val view = footers[footerIndex].invoke(parent.context)
-            return ViewHolderImpl3(view)
+            logger.debug("onCreateViewHolder(viewType=$viewType, footer=$footerIndex)")
+            return ViewHolderImpl(view)
         }
 
-        return ViewHolderImpl4(View(parent.context))
+        logger.debug("onCreateViewHolder(viewType=$viewType, Unknown2)")
+        return ViewHolderImpl(View(parent.context))
     }
 
     override fun getItemViewType(position: Int): Int = getItemViewType(
@@ -59,6 +61,8 @@ open class RecyclerViewWrapperAdapter<T : RecyclerView.ViewHolder>(
     // Static
 
     companion object {
+        private val logger = Logger(RecyclerViewWrapperAdapter::class.java)
+
         const val VIEW_TYPE_UNKNOWN = -1024
         const val VIEW_TYPE_HEADER_OR_FOOTER_0 = 1024
 
@@ -81,6 +85,9 @@ open class RecyclerViewWrapperAdapter<T : RecyclerView.ViewHolder>(
         fun isWrappedAdapterType(viewType: Int): Boolean {
             return viewType != VIEW_TYPE_UNKNOWN && viewType < VIEW_TYPE_HEADER_OR_FOOTER_0
         }
+
+        fun getHeaderIndex(viewType: Int): Int = viewType - VIEW_TYPE_HEADER_OR_FOOTER_0
+        fun getFooterIndex(viewType: Int, headerCount: Int, dataCount: Int): Int = viewType - VIEW_TYPE_HEADER_OR_FOOTER_0 - headerCount - dataCount
     }
 
     private class ViewHolderImpl(itemView: View) : RecyclerView.ViewHolder(itemView)

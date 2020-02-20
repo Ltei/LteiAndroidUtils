@@ -12,7 +12,7 @@ class SimpleRecyclerViewWrapperAdapter<T>(
         val formattedData = wrappedAdapter.formatData(data)
         val callback = DiffUtilCallback(wrappedAdapter.data, formattedData)
         val result = DiffUtil.calculateDiff(callback)
-        wrappedAdapter.setData(formattedData)
+        wrappedAdapter.setData(formattedData, notify = false)
         result.dispatchUpdatesTo(this)
     }
 
@@ -29,14 +29,28 @@ class SimpleRecyclerViewWrapperAdapter<T>(
             val oldItemType = getItemViewType(oldData, oldItemPosition)
             val newItemType = getItemViewType(newData, newItemPosition)
 
-            return when {
-                isWrappedAdapterType(oldItemType) && isWrappedAdapterType(newItemType) -> {
-                    val oldItem = oldData[oldItemPosition - headers.size]
-                    val newItem = newData[newItemPosition - headers.size]
-                    wrappedAdapter.areItemsTheSame(oldItem, newItem)
+            if (isWrappedAdapterType(oldItemType) && isWrappedAdapterType(newItemType)) {
+                val oldItem = oldData[oldItemPosition - headers.size]
+                val newItem = newData[newItemPosition - headers.size]
+                return wrappedAdapter.areItemsTheSame(oldItem, newItem)
+            } else {
+                run {
+                    val oldHeaderIndex = getHeaderIndex(oldItemType)
+                    val newHeaderIndex = getHeaderIndex(newItemType)
+                    if (oldHeaderIndex in headers.indices && newHeaderIndex in headers.indices) {
+                        return oldHeaderIndex == newHeaderIndex
+                    }
                 }
-                else -> oldItemType == newItemType
+                run {
+                    val oldFooterIndex = getFooterIndex(oldItemType, headers.size, oldData.size)
+                    val newFooterIndex = getFooterIndex(newItemType, headers.size, newData.size)
+                    if (oldFooterIndex in footers.indices && newFooterIndex in footers.indices) {
+                        return oldFooterIndex == newFooterIndex
+                    }
+                }
             }
+
+            return false // TODO Should be true
         }
 
 
@@ -44,14 +58,28 @@ class SimpleRecyclerViewWrapperAdapter<T>(
             val oldItemType = getItemViewType(oldData, oldItemPosition)
             val newItemType = getItemViewType(newData, newItemPosition)
 
-            return when {
-                isWrappedAdapterType(oldItemType) && isWrappedAdapterType(newItemType) -> {
-                    val oldItem = oldData[oldItemPosition - headers.size]
-                    val newItem = newData[newItemPosition - headers.size]
-                    wrappedAdapter.areContentsTheSame(oldItem, newItem)
+            if (isWrappedAdapterType(oldItemType) && isWrappedAdapterType(newItemType)) {
+                val oldItem = oldData[oldItemPosition - headers.size]
+                val newItem = newData[newItemPosition - headers.size]
+                return wrappedAdapter.areContentsTheSame(oldItem, newItem)
+            } else {
+                run {
+                    val oldHeaderIndex = getHeaderIndex(oldItemType)
+                    val newHeaderIndex = getHeaderIndex(newItemType)
+                    if (oldHeaderIndex in headers.indices && newHeaderIndex in headers.indices) {
+                        return oldHeaderIndex == newHeaderIndex
+                    }
                 }
-                else -> oldItemType == newItemType
+                run {
+                    val oldFooterIndex = getFooterIndex(oldItemType, headers.size, oldData.size)
+                    val newFooterIndex = getFooterIndex(newItemType, headers.size, newData.size)
+                    if (oldFooterIndex in footers.indices && newFooterIndex in footers.indices) {
+                        return oldFooterIndex == newFooterIndex
+                    }
+                }
             }
+
+            return false // TODO Should be true
         }
 
         private fun getItemViewType(data: List<T>, position: Int): Int = getItemViewType(
