@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion compile_sdk_version
-    
+    compileSdkVersion versions.compile_sdk
+
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion compile_sdk_version
+        minSdkVersion versions.min_sdk
+        targetSdkVersion versions.compile_sdk
         versionCode 1
         versionName "1.0"
 
@@ -32,10 +32,9 @@ repositories {
 }
 
 dependencies {
-    implementation kotlin_compile_path
-    implementation cfuture_compile_path
+    implementation deps.kotlin
+    implementation deps.androidx_appcompat
 
-    implementation "androidx.appcompat:appcompat:$androidx_version"
     implementation "androidx.exifinterface:exifinterface:1.0.0" // TODO FIX DEPENDENCY
 
     implementation project(':ljubase')

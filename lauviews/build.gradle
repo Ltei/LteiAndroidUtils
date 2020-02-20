@@ -31,7 +31,6 @@ repositories {
 
 dependencies {
     implementation deps.kotlin
-
     implementation deps.androidx_recyclerview
 
     implementation project(':ljubase')

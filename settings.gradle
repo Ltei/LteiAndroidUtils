@@ -1,8 +1,10 @@
 rootProject.name = 'lteiandroidutils'
 
-def includeLjuProject(String name) {
+apply from: "projectconfig.gradle"
+
+def includeProject(String path, String name) {
     include(':' + name)
-    project(':' + name).projectDir = new File("C:\\Home\\Workspaces\\LteiUtils\\LteiJavaUtils\\" + name)
+    project(':' + name).projectDir = new File(path + name)
 }
 
 include(':lauadmob')
@@ -24,7 +26,7 @@ include(':lauutils')
 include(':lauverticaldrawer')
 include(':lauviews')
 
-includeLjuProject("ljubase")
-includeLjuProject("ljugson")
-includeLjuProject("ljuutils")
-includeLjuProject("ljuwebclient")
+includeProject(local.ltei_java_utils, "ljubase")
+includeProject(local.ltei_java_utils, "ljugson")
+includeProject(local.ltei_java_utils, "ljuutils")
+includeProject(local.ltei_java_utils, "ljuwebclient")
